@@ -6,3 +6,4 @@ bin/
 obj/
 .idea/
 TheRooms.sln
+.gitignore
