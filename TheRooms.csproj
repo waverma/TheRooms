@@ -53,6 +53,7 @@
     <Compile Include="Domain\Dialog.cs" />
     <Compile Include="Domain\Game.cs" />
     <Compile Include="Domain\Grounds\Grass.cs" />
+    <Compile Include="Domain\Items\Key.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="MFUGE\Area.cs" />
     <Compile Include="MFUGE\Cell.cs" />
@@ -60,7 +61,9 @@
     <Compile Include="MFUGE\Engine.cs" />
     <Compile Include="MFUGE\FileHandler.cs" />
     <Compile Include="MFUGE\Inventory.cs" />
+    <Compile Include="MFUGE\PathFinder.cs" />
     <Compile Include="MFUGE\Player.cs" />
+    <Compile Include="MFUGE\SingleLinkedList.cs" />
     <Compile Include="MFUGE\Vector.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="View\GraphicsExtensions.cs" />

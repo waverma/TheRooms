@@ -36,23 +36,23 @@ namespace TheRooms.Domain
 
 
             // для демонстрации
-            var player = new Player("Admin", new Inventory());
+            var player = new Player("Admin", new Vector(0, 0), new Inventory(24));
 
             var eb = new EngineBuilder();
             eb = eb.AddArea(Area.GetAreaForShow());
             eb = eb.SetCurrentArea(0);
-            eb = eb.AddPlayer(player);
+            eb = eb.SetPlayer(player);
 
             Save = eb.Build();
         }
 
         public void SetTextForShow(string text)
-        {
+        { // Kill me
             TextForDialog = text;
         }
 
         public string GetTextForShow()
-        {
+        { // Kill me
             return TextForDialog;
         }
 

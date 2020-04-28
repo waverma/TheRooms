@@ -8,19 +8,49 @@ namespace TheRooms.MFUGE
 {
     public class Inventory
     {
-        public void PutItem(IItem item)
+        private readonly int _capacity;
+        private readonly List<IItem> _items;
+        public int Count => _items.Count(item => item != null);
+
+        public Inventory(int capacity)
         {
-            throw new NotImplementedException();
+            _capacity = capacity;
+            _items = new List<IItem>(_capacity);
+            for (var i = 0; i < _capacity; i++)
+                _items.Add(null);
         }
 
-        public IReadOnlyList<IItem> GetItems()
+        public bool TryPutItem(IItem item)
         {
-            throw new NotImplementedException();
+            if (_capacity == Count) return false;
+            for (var i = 0; i < _capacity; i++)
+                if (_items[i] == null)
+                {
+                    _items[i] = item;
+                    break;
+                }
+
+            return true;
         }
 
-        public IItem PopItem(int index)
+        public IReadOnlyList<(IItem, int)> GetItems()
         {
-            throw new NotImplementedException();
+            var result = new List<(IItem, int)>();
+
+            for (var i = 0; i < _capacity; i++)
+                if (_items[i] != null)
+                    result.Add((_items[i], i));
+
+            return result;
+        }
+
+        public IItem TryPopItem(int index)
+        {
+            if (index < 0 || index >= _capacity)
+                return null;
+            var result = _items[index];
+            _items[index] = null;
+            return result;
         }
     }
 

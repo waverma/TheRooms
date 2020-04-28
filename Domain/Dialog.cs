@@ -8,7 +8,7 @@ using System.Windows.Forms.VisualStyles;
 namespace TheRooms.Domain
 {
     public class Dialog
-    {
+    { // No test, just something
         private readonly IReadOnlyList<string> _text;
         private int Pointer { get; set; }
         public bool IsDialogCompleted => Pointer >= _text.Count();

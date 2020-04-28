@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace TheRooms.MFUGE
 {
@@ -34,7 +29,7 @@ namespace TheRooms.MFUGE
         }
 
         public bool IsNeighboringVector(Vector other)
-        {
+        { // Test me
             throw new NotImplementedException();
         }
 
@@ -48,11 +43,6 @@ namespace TheRooms.MFUGE
             return new Vector(left.X - right.X, left.Y - right.Y);
         }
 
-        public static Vector operator *(Vector left, Vector right)
-        {
-            throw new NotImplementedException();
-        }
-
         public static Vector operator *(Vector left, int right)
         {
             return new Vector(left.X * right, left.Y * right);
@@ -61,6 +51,16 @@ namespace TheRooms.MFUGE
         public static Vector operator *(int left, Vector right)
         {
             return right * left;
+        }
+
+        public static bool operator ==(Vector left, Vector right)
+        {
+            return left.ToPoint() == right.ToPoint();
+        }
+
+        public static bool operator !=(Vector left, Vector right)
+        {
+            return left.ToPoint() != right.ToPoint();
         }
     }
 }

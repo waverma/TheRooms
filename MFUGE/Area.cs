@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using TheRooms.Domain;
 using TheRooms.Domain.Creatures;
 using TheRooms.Domain.Grounds;
@@ -13,12 +9,13 @@ namespace TheRooms.MFUGE
 {
     public class Area
     {
-        public int Width { get; }
-        public int Height { get; }
-        public readonly Cell[,] Map;
-        public Vector PlayerLocation { get; set; }
+        public int Width => Map.GetLength(0);
+        public int Height => Map.GetLength(1);
 
-        public event Action<IReadOnlyList<Vector>> CellChanged;
+        public readonly Cell[,] Map;
+        public Vector PlayerLocation { get; private set; }
+
+        public event Action<Vector> CellChanged;
 
         private Area(Cell[,] map, Vector playerLocation)
         {
@@ -28,23 +25,32 @@ namespace TheRooms.MFUGE
 
         public void ChangeCell(Vector cellVector, Cell newCell)
         {
-            throw new NotImplementedException();
+            if (!InBounds(cellVector)) return;
+            Map[cellVector.X, cellVector.Y] = newCell;
+            CellChanged?.Invoke(cellVector);
         }
 
-        public List<Vector> FindPathOrDefault(Vector start, Vector end)
-        {
-            throw new NotImplementedException();
+        public IReadOnlyList<Vector> FindPathOrDefault(Vector start, Vector end)
+        { // TEST ME
+            var ordinaryPath = PathFinder.GetOrdinaryPath(this, start, end).ToReadOnlyList();
+            if (ordinaryPath == null) return null;
+            var flattenedPath = PathFinder.GetFlattenedPath(this, ordinaryPath);
+            return flattenedPath;
         }
 
         public void MovePlayer(Vector newCell)
         {
-            throw new NotImplementedException();
+            if (InBounds(newCell))
+                PlayerLocation = newCell;
         }
 
-        public bool InBounds(Point point)
+        public bool InBounds(Vector point)
         {
-            throw new NotImplementedException();
-            // new Rectangle(0, 0, Width, Height).Contains(point);
+            return point.X > -1
+                   && point.Y > -1
+                   && point.X < Width
+                   && point.Y < Height
+                   && Map[point.X, point.Y] != null;
         }
 
         public static Area GetAreaForShow()
@@ -75,6 +81,18 @@ namespace TheRooms.MFUGE
                 }
 
             return new Area(cells, new Vector(5, 5));
+        }
+
+        public static Area GetAreaForTests()
+        {
+            var map = new Cell[2, 2];
+
+            map[0, 0] = new Cell(null, null, null);
+            map[0, 1] = new Cell(null, new Chest(), null);
+            //map[1, 0] = new Cell(null, null, new Grass(new Vector(1, 1)));
+            map[1, 1] = new Cell(null, new Chest(), new Grass(new Vector(1, 1)));
+
+            return new Area(map, new Vector(0, 0));
         }
     }
 

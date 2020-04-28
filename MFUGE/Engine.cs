@@ -1,7 +1,9 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,19 +48,29 @@ namespace TheRooms.MFUGE
         {
             Areas = areas;
             Player = player;
-            CurrentArea = currentArea;
+            CurrentArea = currentArea > -1 && currentArea < Areas.Length
+                ? currentArea : 0;
+
+            if (Areas.Length == 0)
+                CurrentArea = -1;
         }
 
-        public Area GetCurrentArea() =>
-            Areas[CurrentArea];
-
-        private bool TryChangeArea()
+        public Area GetCurrentArea()
         {
-            throw new NotImplementedException();
+            if (CurrentArea < 0 || CurrentArea >= Areas.Length)
+                return null;
+            return Areas[CurrentArea];
+        }
+
+        public bool TryChangeArea(int index)
+        {
+            if (index <= -1 || index >= Areas.Length) return false;
+            CurrentArea = index;
+            return true;
         }
 
         public void ClickOnCell(Vector cellIndex)
-        {
+        { // I have no idea what this method should do
             throw new NotImplementedException();
         }
 
@@ -66,41 +78,66 @@ namespace TheRooms.MFUGE
         // Возможно, стоит перенести в Area
         //
         public static Vector FromPixelToCell(Size pixelSize, Size cellSize, Vector pixel)
-        {
-            throw new NotImplementedException();
+        { // TEST AND FIX ME
+            if (pixelSize.Width % cellSize.Width != 0
+                || pixelSize.Height % cellSize.Height != 0)
+                throw new ArgumentException();
+
+            var oneCellSize = new Size(pixelSize.Width / cellSize.Width,
+                                pixelSize.Height / cellSize.Height);
+
+            return new Vector(pixel.X / oneCellSize.Width, pixel.Y / oneCellSize.Height);
         }
 
         public static Vector FromCellToPixel(Size pixelSize, Size cellSize, Vector cell)
-        {
-            throw new NotImplementedException();
+        { // TEST AND FIX ME
+            if (pixelSize.Width % cellSize.Width != 0
+                || pixelSize.Height % cellSize.Height != 0)
+                throw new ArgumentException();
+
+            var oneCellSize = new Size(pixelSize.Width / cellSize.Width,
+                                       pixelSize.Height / cellSize.Height);
+
+            return new Vector(cell.X * oneCellSize.Width + oneCellSize.Width / 2,
+                              cell.Y * oneCellSize.Height + oneCellSize.Height / 2);
         }
     }
 
     public class EngineBuilder
-    {
+    { // I don`t know how this test
+        private readonly List<Area> _areas;
+        private Player _player;
+        private int CurrentArea { get; set; }
+
         public EngineBuilder()
         {
-            throw new NotImplementedException();
+            _areas = new List<Area>();
         }
 
         public EngineBuilder AddArea(Area area)
         {
-            throw new NotImplementedException();
+            _areas.Add(area);
+            return this;
         }
 
-        public EngineBuilder AddPlayer(Player player)
+        public EngineBuilder SetPlayer(Player player)
         {
-            throw new NotImplementedException();
+            _player = player;
+            return this;
         }
 
         public EngineBuilder SetCurrentArea(int areaIndex)
         {
-            throw new NotImplementedException();
+            CurrentArea = areaIndex;
+            return this;
         }
 
         public Engine Build()
         {
-            throw new NotImplementedException();
+            var index = CurrentArea > -1
+                        && CurrentArea < _areas.Count
+                ? CurrentArea : 0;
+            return new Engine(_areas.ToArray(), _player, index);
         }
     }
 }

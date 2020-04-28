@@ -10,14 +10,14 @@ namespace TheRooms.MFUGE
     public class Player
     {
         public readonly string Name;
-        //public Vector Location { get; set; }
         public Inventory Inventory { get; }
+        public Vector Location { get; set; }
 
-        public Player(string name, Inventory inventory = null)
+        public Player(string name, Vector location, Inventory inventory = null)
         {
             Name = name;
-            //Location = location;
-            Inventory = inventory ?? new Inventory();
+            Location = location;
+            Inventory = inventory ?? new Inventory(24);
         }
     }
 }

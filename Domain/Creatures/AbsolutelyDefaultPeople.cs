@@ -16,7 +16,7 @@ namespace TheRooms.Domain.Creatures
 
         private Vector Location { get; set; }
 
-        public Inventory Inventory => new Inventory();
+        public Inventory Inventory => new Inventory(4);
 
         public AbsolutelyDefaultPeople(Dialog dialog, string name, Vector location, string fileName = null)
         {

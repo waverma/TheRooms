@@ -19,34 +19,45 @@ namespace TheRooms.MFUGE
             Ground = ground;
         }
 
+        public bool IsEmpty()
+        {
+            return Creature == null;
+        }
+
         public Cell AddCreature(ICreature creature)
         {
-            throw new NotImplementedException();
+            return Creature != null
+                ? this
+                : new Cell(Sky, creature, Ground);
         }
 
         public Cell AddSky(ISky sky)
         {
-            throw new NotImplementedException();
+            return Sky != null 
+                ? this 
+                : new Cell(sky, Creature, Ground);
         }
 
         public Cell AddGround(IGround ground)
         {
-            throw new NotImplementedException();
+            return Ground != null
+                ? this
+                : new Cell(Sky, Creature, ground);
         }
 
         public Cell RemoveSky()
         {
-            throw new NotImplementedException();
+            return new Cell(null, Creature, Ground);
         }
 
         public Cell RemoveCreature()
         {
-            throw new NotImplementedException();
+            return new Cell(Sky, null, Ground);
         }
 
         public Cell RemoveGround()
         {
-            throw new NotImplementedException();
+            return new Cell(Sky, Creature, null);
         }
 
         public static Cell GetRandomCell()

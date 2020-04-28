@@ -39,7 +39,7 @@ namespace TheRooms.View
             Area.CellChanged += AreaOnCellChanged;
         }
 
-        private void AreaOnCellChanged(IReadOnlyList<Vector> obj)
+        private void AreaOnCellChanged(Vector obj)
         {
             throw new NotImplementedException();
         }
@@ -146,7 +146,7 @@ namespace TheRooms.View
             throw new NotImplementedException();
         }
 
-        private void MovePlayer(List<Vector> path)
+        private void MovePlayer(IReadOnlyList<Vector> path)
         {
             throw new NotImplementedException();
         }
