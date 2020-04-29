@@ -1,14 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace TheRooms.MFUGE
 {
     public class PathFinder
     {
+        private static Vector[] NeigborVector = new[]
+        {
+            new Vector(-1, -1), 
+            new Vector(-1, 0), 
+            new Vector(-1, 1), 
+            new Vector(1, -1), 
+            new Vector(1, 0), 
+            new Vector(1, 1), 
+            new Vector(0, -1), 
+            new Vector(0, 1)
+        };
         public static SinglyLinkedList<Vector> GetOrdinaryPath(Area area, Vector start, Vector end)
         { // TEST ME
             var queue = new Queue<SinglyLinkedList<Vector>>();
@@ -63,7 +76,31 @@ namespace TheRooms.MFUGE
 
         private static bool IsIntersect(Area area, Vector start, Vector end)
         {
-            throw new NotImplementedException();
+            var a = start.Y - end.Y;
+            var b = end.X - start.X;
+            var c = start.X * end.Y - end.X * start.Y;
+            if (a == b && a == 0)
+                throw new ArgumentException();
+            var temp = start;
+            while (temp == end)
+            {
+                if (area.Map[temp.X, temp.Y].Creature != null || area.Map[temp.X, temp.Y] == null)
+                    return false;
+                var isStep = true;
+                foreach (var vectorAdd in NeigborVector)
+                {
+                    var tempTemp = vectorAdd + temp;
+                    if (!area.InBounds(tempTemp) || tempTemp.X * a + tempTemp.Y * b + c != 0) 
+                        continue;
+                    temp = tempTemp;
+                    isStep = false;
+
+                }
+                
+                if (isStep) return false;
+            }
+
+            return true;
         }
 
         private static IEnumerable<Vector> GetIncidentPoint(Area area, Vector point)

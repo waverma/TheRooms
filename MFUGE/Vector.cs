@@ -28,6 +28,11 @@ namespace TheRooms.MFUGE
             return new Point(X, Y);
         }
 
+        public double GetLength(Vector vector)
+        {
+            return Math.Sqrt((X - vector.X) * (X - vector.X) + (Y - vector.Y) * (Y - vector.Y));
+        }
+
         public bool IsNeighboringVector(Vector other)
         { // Test me
             throw new NotImplementedException();
