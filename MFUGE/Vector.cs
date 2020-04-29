@@ -4,7 +4,7 @@ using System.Drawing;
 namespace TheRooms.MFUGE
 {
     public struct Vector
-    { // Тестов нет
+    {
         public readonly int X;
         public readonly int Y;
 
