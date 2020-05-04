@@ -46,7 +46,7 @@ namespace TheRooms.MFUGE
         { // TEST ME
             var ordinaryPath = PathFinder.GetOrdinaryPath(this, start, end).ToReadOnlyList();
             if (ordinaryPath == null) return null;
-            var flattenedPath = PathFinder.GetFlattenedPath(this, ordinaryPath);
+            //var flattenedPath = PathFinder.GetFlattenedPath(this, ordinaryPath);
             return ordinaryPath;
         }
 
@@ -56,13 +56,18 @@ namespace TheRooms.MFUGE
                 PlayerLocation = newCell;
         }
 
-        public bool InBounds(Vector point)
+        public static bool InBounds(Area area, Vector point)
         {
             return point.X > -1
                    && point.Y > -1
-                   && point.X < Width
-                   && point.Y < Height
-                   && Map[point.X, point.Y] != null;
+                   && point.X < area.Width
+                   && point.Y < area.Height
+                   && area.Map[point.X, point.Y] != null;
+        }
+
+        public bool InBounds(Vector point)
+        {
+            return Area.InBounds(this, point);
         }
 
         public static Area GetAreaForShow()
@@ -141,38 +146,13 @@ namespace TheRooms.MFUGE
         public static Area GetAreaForTests()
         {
             var map = new Cell[2, 2];
-            var chest1 = new Chest(new Inventory(10), new Vector(0, 1));
-            var chest2 = new Chest(new Inventory(10), new Vector(1, 1));
 
             map[0, 0] = new Cell(null, null, null);
-            map[0, 1] = new Cell(null, chest1, null);
+            map[0, 1] = new Cell(null, null, null);
             //map[1, 0] = new Cell(null, null, new Grass(new Vector(1, 1)));
-            map[1, 1] = new Cell(null, chest2, new Grass(new Vector(1, 1)));
+            map[1, 1] = new Cell(null, null, new Grass(new Vector(1, 1)));
 
             return new Area(map, new Vector(0, 0));
-        }
-    }
-
-    public static class AreaBuilder
-    {
-        public static Area FromText(string text)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static Area FromLines(string[] skyLines, string[] creatureLines, string[] groundLines)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static string ToLine(Area area)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static string ToText(string[] skyLines, string[] creatureLines, string[] groundLines)
-        {
-            throw new NotImplementedException();
         }
     }
 }

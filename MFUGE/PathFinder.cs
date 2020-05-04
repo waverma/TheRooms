@@ -23,6 +23,9 @@ namespace TheRooms.MFUGE
 
         public static SinglyLinkedList<Vector> GetOrdinaryPath(Area area, Vector start, Vector end)
         { // TEST ME
+            if (!Area.InBounds(area, start) || !Area.InBounds(area, end))
+                return null;
+
             var queue = new Queue<SinglyLinkedList<Vector>>();
             var visited = new HashSet<Vector>();
             var result = default(SinglyLinkedList<Vector>);

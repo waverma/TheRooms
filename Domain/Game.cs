@@ -76,11 +76,7 @@ namespace TheRooms.Domain
         //
         //
         public static Vector FromPixelToCell(Size pixelSize, Size cellSize, Vector pixel)
-        { // TEST AND FIX ME
-            //if (pixelSize.Width % cellSize.Width != 0
-            //    || pixelSize.Height % cellSize.Height != 0)
-            //    throw new ArgumentException();
-
+        {
             if (pixel.X < 0 || pixel.Y < 0 
                             || pixel.X >= pixelSize.Width 
                             || pixel.Y >= pixelSize.Height) 
@@ -93,11 +89,7 @@ namespace TheRooms.Domain
         }
 
         public static Vector FromCellToPixel(Size pixelSize, Size cellSize, Vector cell)
-        { // TEST AND FIX ME
-            //if (pixelSize.Width % cellSize.Width != 0
-            //    || pixelSize.Height % cellSize.Height != 0)
-            //    throw new ArgumentException();
-
+        {
             if (cell.X < 0 || cell.Y < 0
                            || cell.X >= cellSize.Width 
                            || cell.Y >= cellSize.Height) 

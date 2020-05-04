@@ -7,7 +7,7 @@ namespace TheRooms.Domain.Creatures
     {
         public double Health { get; private set; }
         private readonly string _name;
-        private readonly string _fileName = @"Images\Artyom.png";
+        private readonly string _fileName = @"Images\Artyom_o.png";
         private readonly Dialog _dialog;
         public bool IsMortal => true;
 

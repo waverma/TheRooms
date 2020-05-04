@@ -10,14 +10,14 @@ namespace Tests
     {
         private readonly Area _area = Area.GetAreaForTests();
 
-        [TestCase(0, 3, 3)]
-        [TestCase(1, 3, 2)]
-        [TestCase(3, 3, 1)]
-        [TestCase(2, 3, 0)]
-        [TestCase(4, 3, 0)]
-        [TestCase(3, 4, 0)]
-        [TestCase(3, 2, 0)]
-        public void TestOrdinaryPathFinder(int start, int end, int length)
+        [TestCase(0, 3, 3, false)]
+        [TestCase(1, 3, 2, false)]
+        [TestCase(3, 3, 1, false)]
+        [TestCase(2, 3, 0, true)]
+        [TestCase(4, 3, 0, true)]
+        [TestCase(3, 4, 0, true)]
+        [TestCase(3, 2, 0, true)]
+        public void TestOrdinaryPathFinder(int start, int end, int length, bool isNull)
         {
             var vectors = new List<Vector>
             {
@@ -29,7 +29,11 @@ namespace Tests
             };
 
             var path = PathFinder.GetOrdinaryPath(_area, vectors[start], vectors[end]);
-            Assert.AreEqual(path.Length, length);
+
+            if (isNull)
+                Assert.IsNull(path);
+            else
+                Assert.AreEqual(path.Length, length);
         }
 
         [Test]
