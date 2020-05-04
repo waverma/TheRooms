@@ -59,7 +59,15 @@
     <Compile Include="Domain\Dialog.cs" />
     <Compile Include="Domain\Game.cs" />
     <Compile Include="Domain\Grounds\Grass.cs" />
+    <Compile Include="Domain\Items\IGun.cs" />
     <Compile Include="Domain\Items\Key.cs" />
+    <Compile Include="Domain\Items\Pistol.cs" />
+    <Compile Include="Domain\LogicBlocks\AreaBlock.cs" />
+    <Compile Include="Domain\LogicBlocks\DialogBlock.cs" />
+    <Compile Include="Domain\LogicBlocks\InventoryBlock.cs" />
+    <Compile Include="Domain\LogicBlocks\MenuBlock.cs" />
+    <Compile Include="Domain\LogicBlocks\PlayerStateBlock.cs" />
+    <Compile Include="Domain\LogicBlocks\TempClassForExperements.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="MFUGE\Area.cs" />
     <Compile Include="MFUGE\Cell.cs" />
@@ -71,7 +79,6 @@
     <Compile Include="MFUGE\Player.cs" />
     <Compile Include="MFUGE\SingleLinkedList.cs" />
     <Compile Include="MFUGE\Vector.cs" />
-    <Compile Include="Room.cs" />
     <Compile Include="Tests\AreaTests.cs" />
     <Compile Include="Tests\CellTests.cs" />
     <Compile Include="Tests\EngineTests.cs" />
@@ -80,7 +87,31 @@
     <Compile Include="Tests\PathFinderTest.cs" />
     <Compile Include="Tests\PlayerTests.cs" />
     <Compile Include="Tests\VectorTests.cs" />
+    <Compile Include="View\CreatureInteractControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\CreatureInteractControl.Designer.cs">
+      <DependentUpon>CreatureInteractControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\GraphicsExtensions.cs" />
+    <Compile Include="View\InventoryControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\InventoryControl.Designer.cs">
+      <DependentUpon>InventoryControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\PlayerStateControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\PlayerStateControl.Designer.cs">
+      <DependentUpon>PlayerStateControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\TestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\TestForm.Designer.cs">
+      <DependentUpon>TestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\TheRooms.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,6 +156,18 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Content Include="Images\chest-closed.png" />
+    <Content Include="Images\chest-opened.png" />
+    <Content Include="Images\Door.png" />
+    <Content Include="Images\Grass.png" />
+    <Content Include="Images\Key.png" />
+    <Content Include="Images\Path.png" />
+    <Content Include="Images\Artyom.png" />
+    <Content Include="Images\Pistol.png" />
+    <Content Include="Images\Player.gif" />
+    <Content Include="Images\Player.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

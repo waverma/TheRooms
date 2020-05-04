@@ -27,11 +27,13 @@ namespace TheRooms.View
 
         public MenuControl(Game game)
         {
+            BackColor = Color.Aqua;
+
             InitializeComponent();
             _game = game;
 
             Size = CurrentSize;
-            _buttonsFunction = _game.GetGameMenuButtonContent();
+            _buttonsFunction = _game._menuBlock.GetGameMenuButtonContent();
 
             _playPauseButton = new Button()
             {
@@ -63,6 +65,12 @@ namespace TheRooms.View
             _saveButton.Click += _saveButton_Click;
             _showSavesPauseButton.Click += _showSavesPauseButton_Click;
             _exitButton.Click += _ExitButton_Click;
+
+            Controls.Add(_playPauseButton);
+            Controls.Add(_settingsButton);
+            Controls.Add(_saveButton);
+            Controls.Add(_showSavesPauseButton);
+            Controls.Add(_exitButton);
         }
 
         private void _ExitButton_Click(object sender, EventArgs e)

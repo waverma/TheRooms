@@ -20,12 +20,13 @@ namespace TheRooms.Domain
 
         public string GetNextLine()
         {
-            return IsDialogCompleted ? null : _text[Pointer++];
+            return IsDialogCompleted ? "" : _text[Pointer++];
         }
 
-        private string GetPreviousLine()
+        public string GetPreviousLine()
         {
-            throw new NotImplementedException();
+            if (Pointer == 0) return "";
+            return IsDialogCompleted ? null : _text[--Pointer];
         }
     }
 }

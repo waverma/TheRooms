@@ -9,14 +9,16 @@ namespace TheRooms.Domain.Items
 {
     public class Key : IItem
     {
-        public Action<Engine> GetAction()
+        public Action<Game> GetAction()
         {
-            throw new NotImplementedException();
+            return (Game game) => { game._playerStateBlock.Player.DoDamage(50); };
         }
 
         public string GetPictureDirectory()
         {
-            throw new NotImplementedException();
+            return @"Images\Key.png";
         }
+
+        public event Action StateChanged;
     }
 }

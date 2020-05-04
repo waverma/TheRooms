@@ -1,50 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Text;
 using NUnit.Framework;
+using TheRooms.Domain;
 using TheRooms.MFUGE;
 
 namespace Tests
 {
     public class EngineTests
     {
-        private Engine _engine;
+        private Game _engine;
 
         [Test]
         public void TestGetCurrentAreaWhenCurrentAreaWasSet()
         {
-            var eb = new EngineBuilder();
             var area = Area.GetAreaForShow();
-            eb = eb.AddArea(Area.GetAreaForTests());
-            eb = eb.AddArea(area);
-            eb = eb.SetPlayer(new Player("waverma", new Vector(0, 0)));
-            eb = eb.SetCurrentArea(1);
-            _engine = eb.Build();
+            _engine = new Game(new[] { Area.GetAreaForShow(), area }, 1);
 
-            Assert.AreEqual(_engine.GetCurrentArea(), area);
+            Assert.AreEqual(_engine._areaBlock.GetCurrentArea(), area);
         }
 
         [Test]
         public void TestGetCurrentAreaWhenCurrentNotSet()
         {
-            var eb = new EngineBuilder();
-            var area = Area.GetAreaForTests();
-            eb = eb.AddArea(area);
-            eb = eb.SetPlayer(new Player("waverma", new Vector(0, 0)));
-            var engine = eb.Build();
 
-            Assert.AreEqual(engine.GetCurrentArea(), area);
+            var area = Area.GetAreaForShow();
+            _engine = new Game(new[] { area });
+
+            Assert.AreEqual(_engine._areaBlock.GetCurrentArea(), area);
         }
 
         [Test]
         public void TestGetCurrentAreaWhenNoAreas()
         {
-            var eb = new EngineBuilder();
-            eb = eb.SetPlayer(new Player("waverma", new Vector(0, 0)));
-            eb = eb.SetCurrentArea(1);
-            var engine = eb.Build();
+            _engine = new Game(new Area[0]);
 
-            Assert.IsNull(engine.GetCurrentArea());
+            Assert.IsNull(_engine._areaBlock.GetCurrentArea());
         }
 
         [TestCase(0)]
@@ -59,48 +52,64 @@ namespace Tests
                 Area.GetAreaForTests()
             };
 
-            var eb = new EngineBuilder();
-            eb = eb.AddArea(list[0]);
-            eb = eb.AddArea(list[1]);
-            eb = eb.SetPlayer(new Player("waverma", new Vector(0, 0)));
-            eb = eb.SetCurrentArea(0);
-            var engine = eb.Build();
+            _engine = new Game(list.ToArray(), 0);
 
-            var isSuccess = engine.TryChangeArea(index);
+            var isSuccess = _engine._areaBlock.TryChangeArea(index);
             if (index < 0 || index >= 2)
             {
                 Assert.IsFalse(isSuccess);
-                Assert.AreEqual(list[0], engine.GetCurrentArea());
+                Assert.AreEqual(list[0], _engine._areaBlock.GetCurrentArea());
             }
             else
             {
                 Assert.IsTrue(isSuccess);
-                Assert.AreEqual(list[index], engine.GetCurrentArea());
+                Assert.AreEqual(list[index], _engine._areaBlock.GetCurrentArea());
             }
         }
 
-        [Test]
-        public void TestFromPixelToCellWhenIndexIsCorrect()
+        [TestCase(5, 3, 20, 12, 200, 72, 0, 0)]
+        [TestCase(195, 3, 20, 12, 200, 72, 19, 0)]
+        [TestCase(5, 69, 20, 12, 200, 72, 0, 11)]
+        [TestCase(195, 69, 20, 12, 200, 72, 19, 11)]
+        [TestCase(-1, -1, 20, 12, 200, 72, -1, -1)]
+        public void TestFromPixelToCellWhenIndexIsCorrect(int pixelX, int pixelY,
+            int cellsWight, int cellsHeight, int pixelsWight, int pixelsHeight,
+            int cellX, int cellY)
         {
-            throw new NotImplementedException();
+            var pixel = new Vector(pixelX, pixelY);
+            var cells = new Size(cellsWight, cellsHeight);
+            var pixels = new Size(pixelsWight, pixelsHeight);
+            var cell = new Vector(cellX, cellY);
+
+            var result = Game.FromPixelToCell(pixels, cells, pixel);
+
+            Assert.AreEqual(cell, result);
         }
 
-        //[Test]
-        //public void TestFromPixelToCellWhenIndexIsIncorrect()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        [Test]
-        public void TestFromCellToPixelWhenIndexIsCorrect()
+        [TestCase(0, 0, 20, 12, 200, 72, 5, 3)]
+        [TestCase(19, 0, 20, 12, 200, 72, 195, 3)]
+        [TestCase(0, 11, 20, 12, 200, 72, 5, 69)]
+        [TestCase(19, 11, 20, 12, 200, 72, 195, 69)]
+        [TestCase(-1, 0, 20, 12, 200, 72, -1, -1)]
+        [TestCase(0, -1, 20, 12, 200, 72, -1, -1)]
+        [TestCase(20, 0, 20, 12, 200, 72, -1, -1)]
+        [TestCase(0, 12, 20, 12, 200, 72, -1, -1)]
+        [TestCase(19, -1, 20, 12, 200, 72, -1, -1)]
+        [TestCase(-1, 11, 20, 12, 200, 72, -1, -1)]
+        [TestCase(20, 11, 20, 12, 200, 72, -1, -1)]
+        [TestCase(12, 19, 20, 12, 200, 72, -1, -1)]
+        public void TestFromCellToPixelWhenIndexIsCorrect(int cellX, int cellY,
+            int cellsWight, int cellsHeight, int pixelsWight, int pixelsHeight,
+            int pixelX, int pixelY)
         {
-            throw new NotImplementedException();
-        }
+            var pixel = new Vector(pixelX, pixelY);
+            var cells = new Size(cellsWight, cellsHeight);
+            var pixels = new Size(pixelsWight, pixelsHeight);
+            var cell = new Vector(cellX, cellY);
 
-        //[Test]
-        //public void TestTryChangeAreaWhenIndexIsIncorrect()
-        //{
-        //    throw new NotImplementedException();
-        //}
+            var result = Game.FromCellToPixel(pixels, cells, cell);
+
+            Assert.AreEqual(pixel, result);
+        }
     }
 }

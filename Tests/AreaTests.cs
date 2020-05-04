@@ -25,7 +25,7 @@ namespace Tests
         [Test]
         public void TestChangeCellWhenOldCellPlaced()
         {
-            var newCell = new Cell(null, new Chest(), null);
+            var newCell = new Cell(null, new Chest(new Inventory(10), new Vector(0, 0)), null);
             _area.ChangeCell(new Vector(0, 0), newCell);
             Assert.AreEqual(_area.Map[0, 0], newCell);
         }

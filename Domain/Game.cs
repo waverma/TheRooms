@@ -1,129 +1,113 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
+using TheRooms.Domain.LogicBlocks;
 using TheRooms.MFUGE;
 
 namespace TheRooms.Domain
 {
     public enum GameState
     {
-        MainMenu = 0,
-        Play,
-        Pause,
-        SettingsShow,
 
-
-        Closing = 999
     }
 
     public class Game
     {
-        private GameState _state;
-         
-        private string TextForDialog { get; set; }
-        private const string InitialSaveFileName = "";
+        /*
+         * 1) Create Engine
+         * 2) Add all area from folder
+         *      1) CellBuilder in TextFromLines
+         * 3) Set current area
+         * 4) Add player
+         *      1) set Location
+         *      2) Add inventory
+         *
+         * + Set all event
+         * + []add cellContent interacted
+         *
+         *
+         *
+         * Action:
+         *  1) Move on Area +-
+         *  2) Move Between Area +
+         *  3) Click on ICreature +
+         *  4) Put/Pop IItem on/from inventory +-
+         *  5) Apply IItem to IC, IG, IS -
+         *  6) All IC and so on must action on Tick (every Tick) +
+         *  7) Interacting with self inventory and with self setting -+
+         *  8) Create all module and control +-
+         *  9) ...
+         */
 
-        public Engine Save { get; private set; }
+
+        public readonly AreaBlock _areaBlock;
+        public readonly InventoryBlock _inventoryBlock;
+        public readonly DialogBlock _dialogBlock;
+        public readonly MenuBlock _menuBlock;
+        public readonly PlayerStateBlock _playerStateBlock;
 
         public event Action<GameState> StateChanged;
 
         public Game()
+            : this(GetAreas(), 0, new Player("Admin", new Inventory(10)))
         {
-            ChangeStage(GameState.Play);
-
-
-
-            // для демонстрации
-            var player = new Player("Admin", new Vector(0, 0), new Inventory(24));
-
-            var eb = new EngineBuilder();
-            eb = eb.AddArea(Area.GetAreaForShow());
-            eb = eb.SetCurrentArea(0);
-            eb = eb.SetPlayer(player);
-
-            Save = eb.Build();
         }
 
-        public void SetTextForShow(string text)
-        { // Kill me
-            TextForDialog = text;
-        }
-
-        public string GetTextForShow()
-        { // Kill me
-            return TextForDialog;
-        }
-
-        private void ChangeStage(GameState state)
+        public Game(Area[] areas, int currentArea = 0, Player player = null)
         {
-            StateChanged?.Invoke(_state = state);
+            if (player == null)
+                player = new Player("Unknown", new Inventory(10));
+
+            _areaBlock = new AreaBlock(areas, currentArea);
+            _inventoryBlock = new InventoryBlock(player.Inventory);
+            _dialogBlock = new DialogBlock();
+            _menuBlock = new MenuBlock();
+            _playerStateBlock = new PlayerStateBlock(player);
         }
 
-        public IReadOnlyDictionary<string, Action<Game>> GetMainMenuButtonContent()
+        private static Area[] GetAreas() // загрузка карт из вне
         {
-            throw new NotImplementedException();
+            var area = Area.GetAreaForShow();
+            var area2 = Area.GetAreaForShow2();
+            return new Area[2] { area, area2 };
         }
 
-        public IReadOnlyDictionary<string, Action<Game>> GetGameMenuButtonContent()
-        {
-            var gameMenuButtonContent = new Dictionary<string, Action<Game>>
-            { 
-                ["Play/Pause"] = (Game game) =>
-                {
-                    ChangeStage(_state == GameState.Pause ? GameState.Play : GameState.Pause);
-                },
-                ["settings"] = (Game game) => ChangeStage(GameState.SettingsShow),
-                //["save"] = (Game game) => ChangeStage(GameState.Closing),
-                //["Exit"] = (Game game) => ChangeStage(GameState.Closing),
-                // ["New game"] = (Game game) => StartGame(InitialSaveFileName),
-                ["Exit"] = (Game game) => ChangeStage(GameState.Closing)
-            };
 
-            return gameMenuButtonContent;
+        //
+        //
+        //
+        public static Vector FromPixelToCell(Size pixelSize, Size cellSize, Vector pixel)
+        { // TEST AND FIX ME
+            //if (pixelSize.Width % cellSize.Width != 0
+            //    || pixelSize.Height % cellSize.Height != 0)
+            //    throw new ArgumentException();
+
+            if (pixel.X < 0 || pixel.Y < 0 
+                            || pixel.X >= pixelSize.Width 
+                            || pixel.Y >= pixelSize.Height) 
+                return new Vector(-1, -1);
+
+            var oneCellSize = new Size(pixelSize.Width / cellSize.Width,
+                pixelSize.Height / cellSize.Height);
+
+            return new Vector(pixel.X / oneCellSize.Width, pixel.Y / oneCellSize.Height);
         }
 
-        public void StartGame(string saveFileName)
-        {
-            throw new NotImplementedException();
+        public static Vector FromCellToPixel(Size pixelSize, Size cellSize, Vector cell)
+        { // TEST AND FIX ME
+            //if (pixelSize.Width % cellSize.Width != 0
+            //    || pixelSize.Height % cellSize.Height != 0)
+            //    throw new ArgumentException();
+
+            if (cell.X < 0 || cell.Y < 0
+                           || cell.X >= cellSize.Width 
+                           || cell.Y >= cellSize.Height) 
+                return new Vector(-1, -1);
+
+            var oneCellSize = new Size(pixelSize.Width / cellSize.Width,
+                pixelSize.Height / cellSize.Height);
+
+            return new Vector(cell.X * oneCellSize.Width + oneCellSize.Width / 2,
+                cell.Y * oneCellSize.Height + oneCellSize.Height / 2);
         }
-
-        public void SetNewSave()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void SetSave()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveAction_EventHandler()
-        {
-            throw new NotImplementedException();
-        }
-
-        //public bool IsWallAt(Point at)
-        //{
-        //    return IsWallAt(at.X, at.Y);
-        //}
-
-        //public bool IsWallAt(int x, int y)
-        //{
-        //    return CellCost[x, y] == 0;
-        //}
-
-        //public bool InsideMap(Point p) => InsideMap(p.X, p.Y);
-
-        //public bool InsideMap(int x, int y)
-        //{
-        //    return x >= 0 && x < MapWidth && y >= 0 && y < MapHeight;
-        //}
-
-        //public void RemoveGoal()
-        //{
-        //    Goal = -1;
-        //}
     }
 }

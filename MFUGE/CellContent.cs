@@ -10,7 +10,9 @@ namespace TheRooms.MFUGE
 {
     public interface ICreature
     {
-        event Action<Vector> CreatureDeath;
+        event Action<Vector> StateChanged;
+        double Health { get; }
+        bool IsMortal { get; }
 
         Inventory Inventory { get; }
         Action<Game> GetActionOnClick();

@@ -27,7 +27,7 @@ namespace TheRooms.Domain.Grounds
 
         public string GetPictureDirectory()
         {
-            throw new NotImplementedException();
+            return @"Images\Grass.png";
         }
     }
 }

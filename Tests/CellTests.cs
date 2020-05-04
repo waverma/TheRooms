@@ -13,14 +13,14 @@ namespace Tests
         public void Setup()
         {
             _emptyCell = new Cell(null, null, null);
-            _cellWithContent = new Cell(null, new Chest(), new Grass(new Vector(0, 0)));
+            _cellWithContent = new Cell(null, new Chest(new Inventory(10), new Vector(0, 0)), new Grass(new Vector(0, 0)));
         }
 
 
         [Test]
         public void TestAddCreatureWhenEmptyCell()
         {
-            var chest = new Chest();
+            var chest = new Chest(new Inventory(10), new Vector(0, 0));
             _emptyCell = _emptyCell.AddCreature(chest);
             Assert.AreEqual(_emptyCell.Creature, chest);
         }
@@ -45,7 +45,7 @@ namespace Tests
         [Test]
         public void TestAddCreatureWhenCreaturePlaced()
         {
-            var chest = new Chest();
+            var chest = new Chest(new Inventory(10), new Vector(0, 0));
             var oldChest = _cellWithContent.Creature;
             _cellWithContent = _cellWithContent.AddCreature(chest);
             Assert.AreEqual(_cellWithContent.Creature, oldChest);

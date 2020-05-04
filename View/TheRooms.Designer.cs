@@ -1,6 +1,6 @@
 ﻿namespace TheRooms
 {
-    partial class Form1
+    partial class TheRooms
     {
         /// <summary>
         /// Обязательная переменная конструктора.

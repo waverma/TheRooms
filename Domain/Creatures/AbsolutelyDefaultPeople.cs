@@ -1,38 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheRooms.MFUGE;
 
 namespace TheRooms.Domain.Creatures
 {
     public class AbsolutelyDefaultPeople : IPeople
     {
-        private double Health { get; set; }
+        public double Health { get; private set; }
         private readonly string _name;
-        private readonly string _fileName = "Artyom.png";
+        private readonly string _fileName = @"Images\Artyom_o.png";
         private readonly Dialog _dialog;
+        public bool IsMortal => true;
 
         private Vector Location { get; set; }
 
-        public Inventory Inventory => new Inventory(4);
+        public Inventory Inventory => new Inventory(10);
 
         public AbsolutelyDefaultPeople(Dialog dialog, string name, Vector location, string fileName = null)
         {
+            Health = 100;
             Location = location;
             _dialog = dialog;
             _name = name;
             if (fileName != null) _fileName = fileName;
         }
 
-        public event Action<Vector> CreatureDeath;
+        public event Action<Vector> StateChanged;
 
         public void DoDamage(double value)
         {
             Health -= value;
             if (Health > 0) return;
-            CreatureDeath?.Invoke(GetLocation());
+            StateChanged?.Invoke(GetLocation());
         }
 
         public Action<Game> GetAction()
@@ -42,7 +40,7 @@ namespace TheRooms.Domain.Creatures
 
         public Action<Game> GetActionOnClick()
         {
-            return (Game game) => game.SetTextForShow(GetDialog().GetNextLine());
+            return (Game game) => game._dialogBlock.ChangeCreatureDialog(GetDialog());
         }
 
         public Dialog GetDialog()
