@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using TheRooms.MFUGE;
 
 namespace TheRooms.Domain.Items
 {
     public class Bullet
-    { // NoTests
+    { // TODO вынести
         public double Damage { get; }
 
         private Bullet(double damage)
@@ -24,7 +20,7 @@ namespace TheRooms.Domain.Items
     }
 
     public class GunShop
-    { // NoTests
+    { // TODO вынести
         public readonly int Capacity;
         private readonly Stack<Bullet> _bullets = new Stack<Bullet>();
         public int BulletsCount => _bullets.Count;
@@ -59,8 +55,7 @@ namespace TheRooms.Domain.Items
     }
 
     public class Pistol : IGun
-    { // NoTests
-        // УБИРАТЬ ПУЛЮ ТОЛЬКО ПОСЛЕ ПОЛНОГО ЗАВЕРШЕНИЯ ВЫСТРЕЛА ИЛИ НЕТ
+    { // УБИРАТЬ ПУЛЮ ТОЛЬКО ПОСЛЕ ПОЛНОГО ЗАВЕРШЕНИЯ ВЫСТРЕЛА ИЛИ НЕТ
         private GunShop Shop { get; set; }
 
         public event Action StateChanged;
@@ -117,7 +112,7 @@ namespace TheRooms.Domain.Items
         }
 
         public GunShop ShowShop()
-        { // Опасно
+        { // TODO Опасно
             return Shop;
         }
 

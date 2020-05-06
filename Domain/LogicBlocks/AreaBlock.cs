@@ -51,12 +51,12 @@ namespace TheRooms.Domain.LogicBlocks
         }
 
         public Area GetArea(int index)
-        { // ОПАСНО
+        { // TODO ОПАСНО
             return _areas[index];
         }
 
         public Size GetSize()
-        { // Зачeм?
+        { // TODO Зачeм?
             throw new NotImplementedException();
         }
     }

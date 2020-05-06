@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 using TheRooms.Domain.Items;
 using TheRooms.MFUGE;
 
@@ -8,10 +7,10 @@ namespace TheRooms.Domain.Creatures
     public class Door : ICreature
     {
         public Inventory Inventory { get; set; }
-        private readonly Vector _location;
-        private readonly Vector _appearanceLocation;
+        private readonly Vector location;
+        private readonly Vector appearanceLocation;
         public readonly int AppearanceRoom;
-        private bool _isLock;
+        private bool isLock;
         public bool IsMortal => false;
 
         public double Health { get; private set; }
@@ -20,10 +19,10 @@ namespace TheRooms.Domain.Creatures
 
         public Door(Vector location, int otherRoom, Vector otherRoomLocation, bool isLock)
         {
-            _location = location;
-            _appearanceLocation = otherRoomLocation;
+            this.location = location;
+            appearanceLocation = otherRoomLocation;
             AppearanceRoom = otherRoom;
-            _isLock = isLock;
+            this.isLock = isLock;
         }
 
         public void DoDamage(double value)
@@ -39,13 +38,13 @@ namespace TheRooms.Domain.Creatures
         }
 
         public Action<Game> GetActionOnClick()
-        { // ПЕРЕДЕЛАТЬ
+        { // TODO ПЕРЕДЕЛАТЬ
             return game =>
             {
-                if (_isLock)
+                if (isLock)
                 {
                     var keyIndex = -1;
-                    foreach (var (item, index) in game._inventoryBlock.LeftInventory.GetItems())
+                    foreach (var (item, index) in game.InventoryBlock.LeftInventory.GetItems())
                         if (item is Key)
                         {
                             keyIndex = index;
@@ -54,27 +53,27 @@ namespace TheRooms.Domain.Creatures
 
                     if (keyIndex != -1)
                     {
-                        game._inventoryBlock.LeftInventory.TryPopItem(keyIndex);
-                        _isLock = false;
+                        game.InventoryBlock.LeftInventory.TryPopItem(keyIndex);
+                        isLock = false;
                     }
                 }
 
-                if (_isLock) return;
-                var currentArea = game._areaBlock.GetCurrentArea();
-                if (game._areaBlock.TryChangeArea(AppearanceRoom))
+                if (isLock) return;
+                var currentArea = game.AreaBlock.GetCurrentArea();
+                if (game.AreaBlock.TryChangeArea(AppearanceRoom))
                 {
-                    game._areaBlock.GetCurrentArea().MovePlayer(_appearanceLocation);
-                    foreach (var cell in game._areaBlock.GetCurrentArea().Map)
+                    game.AreaBlock.GetCurrentArea().MovePlayer(appearanceLocation);
+                    foreach (var cell in game.AreaBlock.GetCurrentArea().Map)
                         if (cell?.Creature is Door door &&
-                                ReferenceEquals(game._areaBlock.GetArea(door.AppearanceRoom), currentArea))
-                            door._isLock = false;
+                                ReferenceEquals(game.AreaBlock.GetArea(door.AppearanceRoom), currentArea))
+                            door.isLock = false;
                 }
             };
         }
 
         public Vector GetLocation()
         {
-            return _location;
+            return location;
         }
 
         public string GetPictureDirectory()

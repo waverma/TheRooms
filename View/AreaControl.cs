@@ -14,9 +14,9 @@ namespace TheRooms.View
     public partial class AreaControl : UserControl
     {
         private readonly Game _game;//избавиться
-        private Area Area => _game._areaBlock.GetCurrentArea();
-        private Vector PlayerLocation => Game.FromCellToPixel(Size, _game._areaBlock.GetCurrentArea().Size, _game._areaBlock.GetCurrentArea().PlayerLocation);
-        private Size _cellSize => new Size(this.Size.Width / _game._areaBlock.GetCurrentArea().Width, this.Size.Height / _game._areaBlock.GetCurrentArea().Height);
+        private Area Area => _game.AreaBlock.GetCurrentArea();
+        private Vector PlayerLocation => Game.FromCellToPixel(Size, _game.AreaBlock.GetCurrentArea().Size, _game.AreaBlock.GetCurrentArea().PlayerLocation);
+        private Size _cellSize => new Size(this.Size.Width / _game.AreaBlock.GetCurrentArea().Width, this.Size.Height / _game.AreaBlock.GetCurrentArea().Height);
 
         private Image BlackSpaceImage => new Bitmap(@"Images\Path.png");
         private Image PlayerImage => throw new NotImplementedException();
@@ -70,15 +70,15 @@ namespace TheRooms.View
             var clickLocation = new Vector(args.Location);
             var cell = Game.FromPixelToCell(this.Size, new Size(Area.Width, Area.Height), clickLocation);
 
-            if (_game._areaBlock.GetCurrentArea().PlayerLocation == cell)
+            if (_game.AreaBlock.GetCurrentArea().PlayerLocation == cell)
                 return;
 
             var currentCell = Area.Map[cell.X, cell.Y];
             if (currentCell is null) return;
             if (currentCell.Creature is null)
             {
-                _game._inventoryBlock.RemoveRightInventory();
-                var path = Area.FindPathOrDefault(_game._areaBlock.GetCurrentArea().PlayerLocation, cell);
+                _game.InventoryBlock.RemoveRightInventory();
+                var path = Area.FindPathOrDefault(_game.AreaBlock.GetCurrentArea().PlayerLocation, cell);
 
                 if (path == null) return;
                 MovePlayer(path);
@@ -90,7 +90,7 @@ namespace TheRooms.View
             {
                 if (currentCell.Creature == null)
                     return;
-                if (_game._playerStateBlock.Player.Hand is IGun gun)
+                if (_game.PlayerStateBlock.Player.Hand is IGun gun)
                     gun.TryShot(currentCell);
                 return;
             }
@@ -182,7 +182,7 @@ namespace TheRooms.View
 
         private void ShowPlayer(Graphics g)
         {
-            g.DrawImage(new Bitmap(_game._playerStateBlock.Player.GetImageDirectory()),
+            g.DrawImage(new Bitmap(_game.PlayerStateBlock.Player.GetImageDirectory()),
                     new Rectangle(new Point(PlayerLocation.X - _cellSize.Width / 2, PlayerLocation.Y - _cellSize.Height / 2), _cellSize));
         }
 
@@ -190,7 +190,7 @@ namespace TheRooms.View
         {
             foreach (var vector in path.Skip(1))
             {
-                _game._areaBlock.GetCurrentArea().MovePlayer(vector);
+                _game.AreaBlock.GetCurrentArea().MovePlayer(vector);
                 Refresh();
                 Thread.Sleep(10);
             }

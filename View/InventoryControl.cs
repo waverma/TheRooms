@@ -33,7 +33,7 @@ namespace TheRooms.View
 
         public InventoryControl(Game game)
         {
-            game._inventoryBlock.InventoryBlockChanged += Refresh;
+            game.InventoryBlock.InventoryBlockChanged += Refresh;
             DoubleBuffered = true;
             _game = game;
             BackColor = Color.RoyalBlue;
@@ -46,13 +46,13 @@ namespace TheRooms.View
             ToRightButton = new Button { Text = ">" };
             ToRightButton.Click += (sender, args) =>
             {
-                _game._inventoryBlock.TryMoveItemToRightInventory(SelectedLeftItem);
+                _game.InventoryBlock.TryMoveItemToRightInventory(SelectedLeftItem);
             };
 
             AllToRightButton = new Button { Text = ">>>" };
             AllToRightButton.Click += (sender, args) =>
             {
-                _game._inventoryBlock.TryMoveAllItemsToRightInventory();
+                _game.InventoryBlock.TryMoveAllItemsToRightInventory();
             };
 
             var c = new Button
@@ -63,30 +63,30 @@ namespace TheRooms.View
             c.Click += (sender, args) =>
             {
                 if (SelectedLeftItem == -1) return;
-                var item = _game._inventoryBlock.LeftInventory.Items[SelectedLeftItem];
+                var item = _game.InventoryBlock.LeftInventory.Items[SelectedLeftItem];
                 if (item == null) return;
-                var oldItem = _game._playerStateBlock.Player.PutInHand(item);
-                _game._inventoryBlock.LeftInventory.TryPopItem(SelectedLeftItem);
-                _game._inventoryBlock.LeftInventory.TryPutItem(oldItem);
+                var oldItem = _game.PlayerStateBlock.Player.PutInHand(item);
+                _game.InventoryBlock.LeftInventory.TryPopItem(SelectedLeftItem);
+                _game.InventoryBlock.LeftInventory.TryPutItem(oldItem);
                 Refresh();
             };
 
             AllToLeftButton = new Button { Text = "<<<" };
             AllToLeftButton.Click += (sender, args) =>
             {
-                _game._inventoryBlock.TryMoveAllItemsToLeftInventory();
+                _game.InventoryBlock.TryMoveAllItemsToLeftInventory();
             };
 
             ToLeftButton = new Button { Text = "<" };
             ToLeftButton.Click += (sender, args) =>
             {
-                _game._inventoryBlock.TryMoveItemToLeftInventory(SelectedRightItem);
+                _game.InventoryBlock.TryMoveItemToLeftInventory(SelectedRightItem);
             };
 
             CloseButton = new Button { Text = "Close" };
             CloseButton.Click += (sender, args) =>
             {
-                _game._inventoryBlock.RemoveRightInventory();
+                _game.InventoryBlock.RemoveRightInventory();
             };
 
             // Когда я это переношу в OnPaint все начинает ломаться
@@ -128,7 +128,7 @@ namespace TheRooms.View
             var i = 0;
             foreach (Control control in _playerInventoryPanel.Controls)
             { // А ВОТ ЗДЕСЬ ЗАРАБОТАЛО
-                control.Text = _game?._inventoryBlock?.LeftInventory?.Items[i++]?.GetType().Name;
+                control.Text = _game?.InventoryBlock?.LeftInventory?.Items[i++]?.GetType().Name;
 
                 //var picturePath = _game?._inventoryBlock?.LeftInventory?.Items[i++]?.GetPictureDirectory();
                 //if (picturePath != null)
@@ -138,7 +138,7 @@ namespace TheRooms.View
             i = 0;
             foreach (Control control in _creatureInventoryPanel.Controls)
             {
-                control.Text = _game?._inventoryBlock?.RightInventory?.Items[i++]?.GetType().Name;
+                control.Text = _game?.InventoryBlock?.RightInventory?.Items[i++]?.GetType().Name;
 
                 //var picturePath = _game?._inventoryBlock?.RightInventory?.Items[i++]?.GetPictureDirectory();
                 //if (picturePath != null)
@@ -147,9 +147,9 @@ namespace TheRooms.View
                 //Graphics.FromImage(((PictureBox)control).Image).DrawImage(new Bitmap(picturePath), new Rectangle(Point.Empty, new Size(44, 22)));
             }
 
-            _playerInventoryPanel.Visible = _game._inventoryBlock.LeftInventory != null;
-            _creatureInventoryPanel.Visible = _game._inventoryBlock.RightInventory != null;
-            _inventoriesControls.Visible = _game._inventoryBlock.RightInventory != null;
+            _playerInventoryPanel.Visible = _game.InventoryBlock.LeftInventory != null;
+            _creatureInventoryPanel.Visible = _game.InventoryBlock.RightInventory != null;
+            _inventoriesControls.Visible = _game.InventoryBlock.RightInventory != null;
         }
 
         private void Draw()
@@ -180,7 +180,7 @@ namespace TheRooms.View
             {
                 for (var x = 0; x < 5; x++)
                 {
-                    var picturePath = _game?._inventoryBlock?.RightInventory?.Items[i]?.GetPictureDirectory();
+                    var picturePath = _game?.InventoryBlock?.RightInventory?.Items[i]?.GetPictureDirectory();
 
                     var itemPicture = new Button
                     {

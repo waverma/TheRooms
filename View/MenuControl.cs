@@ -33,7 +33,7 @@ namespace TheRooms.View
             _game = game;
 
             Size = CurrentSize;
-            _buttonsFunction = _game._menuBlock.GetGameMenuButtonContent();
+            _buttonsFunction = _game.MenuBlock.GetGameMenuButtonContent();
 
             _playPauseButton = new Button()
             {

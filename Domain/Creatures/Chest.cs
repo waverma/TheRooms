@@ -7,7 +7,7 @@ namespace TheRooms.Domain.Creatures
     {
         public double Health { get; private set; }
         private bool IsLock { get; set; }
-        private Vector Location { get; set; }
+        private Vector Location { get; }
         public bool IsMortal => false;
 
         public Inventory Inventory { get; set; }
@@ -45,11 +45,11 @@ namespace TheRooms.Domain.Creatures
                     StateChanged?.Invoke(GetLocation());
                 }
 
-                game._inventoryBlock.InventoryBlockChanged -= Lock;
+                game.InventoryBlock.InventoryBlockChanged -= Lock;
                 IsLock = false;
                 StateChanged?.Invoke(GetLocation());
-                game._inventoryBlock.SetRightInventory(Inventory);
-                game._inventoryBlock.InventoryBlockChanged += Lock;
+                game.InventoryBlock.SetRightInventory(Inventory);
+                game.InventoryBlock.InventoryBlockChanged += Lock;
             };
         }
 

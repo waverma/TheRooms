@@ -16,7 +16,7 @@ namespace TheRooms.View
         {
             _game = game;
             InitializeComponent();
-            _game._playerStateBlock.PlayerStateBlockChanged += Refresh;
+            _game.PlayerStateBlock.PlayerStateBlockChanged += Refresh;
             Size = new Size(132, 528);
 
             _healthBar = new ProgressBar();
@@ -34,16 +34,16 @@ namespace TheRooms.View
 
             //_healthBar.Style = ProgressBarStyle.Blocks;
             _healthBar.ForeColor = Color.Red;
-            _healthBar.Value = (int)_game._playerStateBlock.Health;
+            _healthBar.Value = (int)_game.PlayerStateBlock.Health;
             _healthBar.Size = new Size(10 * 11, 11 * 2);
             _healthBar.Location = new Point(11, 11);
 
             _mindBar.ForeColor = Color.Blue;
-            _mindBar.Value = (int)_game._playerStateBlock.Mind;
+            _mindBar.Value = (int)_game.PlayerStateBlock.Mind;
             _mindBar.Size = new Size(10 * 11, 11 * 2);
             _mindBar.Location = new Point(11, 55);
 
-            var gun = _game?._playerStateBlock?.Player?.Hand as IGun;
+            var gun = _game?.PlayerStateBlock?.Player?.Hand as IGun;
             _bulletsCount.Text = gun?.ShowShop().BulletsCount + @"\" + gun?.ShowShop().Capacity ?? "ПУСТАЯ РУКА ЫЫЫЫЫЫЫ";
             _bulletsCount.Size = new Size(10 * 11, 11 * 2);
             _bulletsCount.Location = new Point(11 * 7, 99);

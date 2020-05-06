@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TheRooms.Domain.LogicBlocks
 {
     public class MenuBlock
-    {
+    {// todo УБРАТЬ ЖЕСТКУЮ ПРИВЯЗКУ К ВЬЮ И ВООБЩЕ РЕАЛИЗОВАТЬ ЭТУ ХРЕНЬ
         public event Action MenuBlockChanged;
 
         public IReadOnlyDictionary<string, Action<Game>> GetGameMenuButtonContent()

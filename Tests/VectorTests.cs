@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using TheRooms.MFUGE;
 
-namespace Tests
+namespace TheRooms.Tests
 {
     public class VectorTests
     {
@@ -44,7 +44,6 @@ namespace Tests
 
         [TestCase(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, true)]
         [TestCase(1, 0, 0, 1, 2, 1, 1, 1, -1, 2, 0, false)]
-        //[TestCase(0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, false)]
         public void TestC(
             int ax, int ay, int bx, int by, int c,
             int expectedSumX, int expectedSumY, int expectedDiffX, int expectedDiffY, 

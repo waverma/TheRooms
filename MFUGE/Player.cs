@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheRooms.Domain;
 
 namespace TheRooms.MFUGE
@@ -41,7 +36,7 @@ namespace TheRooms.MFUGE
             if (Mind <= 0)
             {
                 Mind = 0;
-                // СДЕСЬ ДОЛЖНЫ БЫТЬ ГОЛЮНЫ
+                // TODO СДЕСЬ ДОЛЖНЫ БЫТЬ ГОЛЮНЫ
             }
             else
                 StateChanged?.Invoke();

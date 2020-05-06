@@ -30,23 +30,23 @@ namespace TheRooms.View
             BackColor = Color.RoyalBlue;
 
             InitializeComponent();
-            game._dialogBlock.DialogBlockChanged += DialogBlock_DialogBlockChanged;
+            game.DialogBlock.DialogBlockChanged += DialogBlock_DialogBlockChanged;
 
             _game = game;
             Size = new Size(115 * 11, 88);
 
             _prevButton.Click += (sender, args) =>
             {
-                _creatureText.Text = _game._dialogBlock.GetPreviousCreatureString();
+                _creatureText.Text = _game.DialogBlock.GetPreviousCreatureString();
             };
             _nextButton.Click += (sender, args) =>
             {
-                _creatureText.Text = _game._dialogBlock.GetNextCreatureString();
+                _creatureText.Text = _game.DialogBlock.GetNextCreatureString();
             };
             _closeButton.Click += (sender, args) =>
             {
-                _game._dialogBlock.ChangeCreatureDialog(null);
-                _game._dialogBlock.ChangePlayerDialog(null);
+                _game.DialogBlock.ChangeCreatureDialog(null);
+                _game.DialogBlock.ChangePlayerDialog(null);
             };
 
             Controls.Add(_playerText);
@@ -59,12 +59,12 @@ namespace TheRooms.View
         private void DialogBlock_DialogBlockChanged()
         {
             var stateFlag = false;
-            if (_game._dialogBlock.CreatureDialog != null)
+            if (_game.DialogBlock.CreatureDialog != null)
                 //&& _game._dialogBlock.PlayerDialog != null)
             {
                 stateFlag = true;
-                _creatureText.Text = _game._dialogBlock.GetNextCreatureString();
-                _playerText.Text = _game._dialogBlock.GetNextPlayerString();
+                _creatureText.Text = _game.DialogBlock.GetNextCreatureString();
+                _playerText.Text = _game.DialogBlock.GetNextPlayerString();
             }
 
             _creatureText.Visible = stateFlag;

@@ -4,7 +4,7 @@ using TheRooms.MFUGE;
 namespace TheRooms.Domain.LogicBlocks
 {
     public class InventoryBlock
-    { // I think that i don`t write test on this class. I forget
+    {
         public Inventory LeftInventory { get;}
         public Inventory RightInventory { get; private set; }
 

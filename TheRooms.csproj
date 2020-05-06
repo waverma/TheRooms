@@ -69,8 +69,7 @@
     <Compile Include="Domain\LogicBlocks\InventoryBlock.cs" />
     <Compile Include="Domain\LogicBlocks\MenuBlock.cs" />
     <Compile Include="Domain\LogicBlocks\PlayerStateBlock.cs" />
-    <Compile Include="Domain\LogicBlocks\TempClassForExperements.cs" />
-    <Compile Include="Level.cs" />
+    <Compile Include="Domain\Rooms\AreasForShowAndTests.cs" />
     <Compile Include="MFUGE\Area.cs" />
     <Compile Include="MFUGE\Cell.cs" />
     <Compile Include="MFUGE\CellContent.cs" />
@@ -81,11 +80,9 @@
     <Compile Include="MFUGE\Vector.cs" />
     <Compile Include="Tests\AreaTests.cs" />
     <Compile Include="Tests\CellTests.cs" />
-    <Compile Include="Tests\EngineTests.cs" />
     <Compile Include="Tests\GameTests.cs" />
     <Compile Include="Tests\InventoryTests.cs" />
     <Compile Include="Tests\PathFinderTest.cs" />
-    <Compile Include="Tests\PlayerTests.cs" />
     <Compile Include="Tests\VectorTests.cs" />
     <Compile Include="View\CreatureInteractControl.cs">
       <SubType>UserControl</SubType>

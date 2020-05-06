@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TheRooms.MFUGE
 {
@@ -71,7 +68,7 @@ namespace TheRooms.MFUGE
         }
 
         private bool IsIntersect(Vector fs, Vector fe, Vector ss, Vector se)
-        { // HELP ME
+        { // TODO HELP ME
             var firstLine = new StraightLineEquation(fs, fe);
             var secondLine = new StraightLineEquation(ss, se);
 
@@ -84,7 +81,7 @@ namespace TheRooms.MFUGE
         }
 
         private Point GetIntersectPoint(StraightLineEquation f, StraightLineEquation s)
-        { // HELP ME
+        { // TODO HELP ME
             var x = (f.B * s.C - s.B * f.C) / (f.A * s.B - s.A * f.B);
             var y = (s.A * f.C - f.A * s.C) / (f.A * s.B - s.A * f.B);
 
@@ -92,7 +89,7 @@ namespace TheRooms.MFUGE
         }
 
         private static IEnumerable<Vector> GetIncidentPoint(Area area, Vector point)
-        { // Fix me
+        { // TODO Fix me
             for (var i = -1; i <= 1; i++)
                 for (var j = -1; j <= 1; j++)
                 {

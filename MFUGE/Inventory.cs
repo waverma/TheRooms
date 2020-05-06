@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheRooms.Domain;
 
 namespace TheRooms.MFUGE
 {
     public class Inventory
-    {// Обновить методы на основе новых свойств
+    {// TODO Обновить методы на основе новых свойств
         private readonly int _capacity;
         public List<IItem> Items { get; }
         public int Count => Items.Count(item => item != null);
@@ -62,7 +60,7 @@ namespace TheRooms.MFUGE
         }
 
         public bool TryMoveItemTo(Inventory other, int itemIndex)
-        {// No tests
+        {// TODO No tests
             if (other.IsFull) return false;
             var item = this.TryPopItem(itemIndex);
             if (item == null) return false;
@@ -72,7 +70,7 @@ namespace TheRooms.MFUGE
     }
 
     public interface IItem
-    {
+    { //  TODO ПЕРЕНЕСТИ В ДРУГОЕ МЕТСО
         // Но это не точно.
         Action<Game> GetAction();
         string GetPictureDirectory();

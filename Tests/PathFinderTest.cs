@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
+using TheRooms.Domain.Rooms;
 using TheRooms.MFUGE;
 
-namespace Tests
+namespace TheRooms.Tests
 {
     public class PathFinderTest
     {
-        private readonly Area _area = Area.GetAreaForTests();
+        private readonly Area area = AreasForShowAndTests.GetAreaForTests();
 
         [TestCase(0, 3, 3, false)]
         [TestCase(1, 3, 2, false)]
@@ -28,7 +28,7 @@ namespace Tests
                 new Vector(1, 2)
             };
 
-            var path = PathFinder.GetOrdinaryPath(_area, vectors[start], vectors[end]);
+            var path = PathFinder.GetOrdinaryPath(area, vectors[start], vectors[end]);
 
             if (isNull)
                 Assert.IsNull(path);

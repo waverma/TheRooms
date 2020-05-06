@@ -30,14 +30,14 @@ namespace TheRooms.MFUGE
         }
 
         public static IEnumerable<Vector> GetVectorsArray(int width, int height)
-        { // No tests
+        { // TODO No tests
             for (var x = 0; x < width; x++)
                 for (var y = 0; y < height; y++)
                     yield return new Vector(x, y);
         }
 
         public bool IsNeighboringVector(Vector other)
-        { // Test me
+        { // TODO Test me
             return Math.Abs(X - other.X) <= 1 && Math.Abs(Y - other.Y) <= 1;
         }
 

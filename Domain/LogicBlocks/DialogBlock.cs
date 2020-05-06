@@ -3,7 +3,7 @@
 namespace TheRooms.Domain.LogicBlocks
 {
     public class DialogBlock
-    { //TEEEEEEEEEEEEEEEEEEEST ME
+    { // TODO ИЗМЕНИТЬ ВМЕСТЕ С ДИАЛОГАМИ
         public Dialog PlayerDialog { get; private set; }
         public Dialog CreatureDialog { get; private set; }
 
@@ -12,13 +12,13 @@ namespace TheRooms.Domain.LogicBlocks
         public void ChangePlayerDialog(Dialog newDialog)
         {
             PlayerDialog = newDialog;
-            DialogBlockChanged();
+            DialogBlockChanged?.Invoke();
         }
 
         public void ChangeCreatureDialog(Dialog newDialog)
         {
             CreatureDialog = newDialog;
-            DialogBlockChanged();
+            DialogBlockChanged?.Invoke();
         }
 
         public string GetNextPlayerString()

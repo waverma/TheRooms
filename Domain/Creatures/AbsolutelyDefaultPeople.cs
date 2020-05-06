@@ -40,7 +40,7 @@ namespace TheRooms.Domain.Creatures
 
         public Action<Game> GetActionOnClick()
         {
-            return (Game game) => game._dialogBlock.ChangeCreatureDialog(GetDialog());
+            return (Game game) => game.DialogBlock.ChangeCreatureDialog(GetDialog());
         }
 
         public Dialog GetDialog()

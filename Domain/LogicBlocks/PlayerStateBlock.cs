@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheRooms.MFUGE;
 
 namespace TheRooms.Domain.LogicBlocks
 {
     public class PlayerStateBlock
-    {
+    { // TODO ДОБАВИТЬ НОРМАЛЬНУЮ РАБОТУ С РУКАМИ И НОВОЙ МЕХАНИКОЙ 
         public double Health => Player.Health;
         public double Mind => Player.Mind;
         public Player Player { get; private set; }

@@ -5,7 +5,7 @@ using TheRooms.Domain;
 namespace TheRooms.MFUGE
 {
     public interface ICreature
-    {
+    {// TODO Разнести интерфейсы на абстракции
         event Action<Vector> StateChanged;
         double Health { get; }
         bool IsMortal { get; }
