@@ -20,7 +20,7 @@ namespace TheRooms.Domain.Rooms
                 "Четвертоя строка",
                 "Пятая строка"
             };
-            var dialog = new Dialog(text);
+            var dialog = new Dialog(text, "Ортем");
 
             var inv1 = new Inventory(10);
             inv1.TryPutItem(new Key());

@@ -27,8 +27,6 @@ namespace TheRooms.View
 
         public MenuControl(Game game)
         {
-            BackColor = Color.Aqua;
-
             InitializeComponent();
             _game = game;
 
@@ -100,6 +98,8 @@ namespace TheRooms.View
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            BackColor = Color.Aqua;
+
             _playPauseButton.Size = ButtonSize;
             _settingsButton.Size = ButtonSize;
             _saveButton.Size = ButtonSize;

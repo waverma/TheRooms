@@ -192,7 +192,7 @@ namespace TheRooms.View
             {
                 _game.AreaBlock.GetCurrentArea().MovePlayer(vector);
                 Refresh();
-                Thread.Sleep(10);
+                Thread.Sleep(35);
             }
         }
     }

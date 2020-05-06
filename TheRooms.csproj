@@ -58,7 +58,7 @@
     <Compile Include="Domain\Creatures\ICreator.cs" />
     <Compile Include="Domain\Creatures\IPeople.cs" />
     <Compile Include="Domain\Creatures\IRestroom.cs" />
-    <Compile Include="Domain\Dialog.cs" />
+    <Compile Include="Domain\Creatures\Dialog.cs" />
     <Compile Include="Domain\Game.cs" />
     <Compile Include="Domain\Grounds\Grass.cs" />
     <Compile Include="Domain\Items\IGun.cs" />
@@ -70,6 +70,7 @@
     <Compile Include="Domain\LogicBlocks\MenuBlock.cs" />
     <Compile Include="Domain\LogicBlocks\PlayerStateBlock.cs" />
     <Compile Include="Domain\Rooms\AreasForShowAndTests.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room1.cs" />
     <Compile Include="MFUGE\Area.cs" />
     <Compile Include="MFUGE\Cell.cs" />
     <Compile Include="MFUGE\CellContent.cs" />
@@ -152,8 +153,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <Folder Include="Saves\Beginning\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Dialogs\R1P1.txt" />
+    <Content Include="Dialogs\R1P2.txt" />
     <Content Include="Images\chest-closed.png" />
     <Content Include="Images\chest-opened.png" />
     <Content Include="Images\Door.png" />

@@ -13,25 +13,27 @@ namespace TheRooms.Domain.LogicBlocks
             {
                 ["Play/Pause"] = (Game game) =>
                 {
-                    //ChangeStage(_state == GameState.Pause ? GameState.Play : GameState.Pause);
+                    // TODO заморозка\разморозка всех потоков, кроме главного
                 },
                 ["settings"] = (Game game) =>
                 {
-                    //ChangeStage(GameState.SettingsShow);
+                    /* TODO добавить формочку для меню настроек
+                     * TODO звук\масштаб\управление
+                     */
                 },
                 ["save"] = (Game game) =>
                 {
-                    //ChangeStage(GameState.Closing);
+                    // TODO сохранить текущий Game в папку последнего сохранения
                 },
                 ["saves"] = (Game game) =>
                 {
-                    //ChangeStage(GameState.Closing);
+                    // TODO создать форму для просмотра сохранений
+                    // TODO выбрать любое сохранение
                 },
                 ["exit"] = (Game game) =>
                 {
-                    //ChangeStage(GameState.Closing);
-                },
-                //["New game"] = (Game game) => StartGame(InitialSaveFileName)
+                    // TODO предложить сохранить и выйти
+                }
             };
 
             return gameMenuButtonContent;

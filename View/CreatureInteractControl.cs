@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TheRooms.Domain;
+using TheRooms.Domain.Creatures;
 
 namespace TheRooms.View
 {
@@ -37,16 +38,35 @@ namespace TheRooms.View
 
             _prevButton.Click += (sender, args) =>
             {
-                _creatureText.Text = _game.DialogBlock.GetPreviousCreatureString();
+                var (textOwner, text) = _game.DialogBlock.Dialog.GetPreviousLine();
+                if (textOwner == CurrentTextOwner.Player)
+                {
+                    _playerText.Text = text;
+                    _creatureText.Text = null;
+                }
+                else
+                {
+                    _creatureText.Text = text;
+                    _playerText.Text = null;
+                }
             };
             _nextButton.Click += (sender, args) =>
             {
-                _creatureText.Text = _game.DialogBlock.GetNextCreatureString();
+                var (textOwner, text) = _game.DialogBlock.Dialog.GetNextLine();
+                if (textOwner == CurrentTextOwner.Player)
+                {
+                    _playerText.Text = text;
+                    _creatureText.Text = null;
+                }
+                else
+                {
+                    _creatureText.Text = text;
+                    _playerText.Text = null;
+                }
             };
             _closeButton.Click += (sender, args) =>
             {
-                _game.DialogBlock.ChangeCreatureDialog(null);
-                _game.DialogBlock.ChangePlayerDialog(null);
+                _game.DialogBlock.ChangeDialog(null);
             };
 
             Controls.Add(_playerText);
@@ -59,12 +79,21 @@ namespace TheRooms.View
         private void DialogBlock_DialogBlockChanged()
         {
             var stateFlag = false;
-            if (_game.DialogBlock.CreatureDialog != null)
-                //&& _game._dialogBlock.PlayerDialog != null)
+            if (_game.DialogBlock.Dialog != null)
             {
                 stateFlag = true;
-                _creatureText.Text = _game.DialogBlock.GetNextCreatureString();
-                _playerText.Text = _game.DialogBlock.GetNextPlayerString();
+
+                var (textOwner, text) = _game.DialogBlock.Dialog.GetNextLine();
+                if (textOwner == CurrentTextOwner.Player)
+                {
+                    _playerText.Text = text;
+                    _creatureText.Text = null;
+                }
+                else
+                {
+                    _creatureText.Text = text;
+                    _playerText.Text = null;
+                }
             }
 
             _creatureText.Visible = stateFlag;
@@ -79,14 +108,16 @@ namespace TheRooms.View
         {
             base.OnPaint(e);
 
-            _playerText.BackColor = Color.Azure;
-            _creatureText.BackColor = Color.Azure;
+            _playerText.BackColor = Color.Transparent;
+            _creatureText.BackColor = Color.Transparent;
             _prevButton.BackColor = Color.Azure;
             _nextButton.BackColor = Color.Azure;
             _closeButton.BackColor = Color.Azure;
 
-            _playerText.BorderStyle = BorderStyle.Fixed3D;
-            _creatureText.BorderStyle = BorderStyle.Fixed3D;
+
+
+            _creatureText.BorderStyle = BorderStyle.None;
+            _playerText.BorderStyle = BorderStyle.None;
             _prevButton.FlatStyle = FlatStyle.Flat;
             _nextButton.FlatStyle = FlatStyle.Flat;
             _closeButton.FlatStyle = FlatStyle.Flat;

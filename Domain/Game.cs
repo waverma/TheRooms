@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using TheRooms.Domain.LogicBlocks;
-using TheRooms.Domain.Rooms;
+using TheRooms.Domain.Rooms.Beginning;
 using TheRooms.MFUGE;
 
 namespace TheRooms.Domain
@@ -13,6 +13,10 @@ namespace TheRooms.Domain
 
     public class Game
     {
+        public const string Images = @"Images\";
+        public const string Dialogs = @"Dialogs\";
+        public const string Saves = @"Saves\";
+
         public readonly AreaBlock AreaBlock;
         public readonly InventoryBlock InventoryBlock;
         public readonly DialogBlock DialogBlock;
@@ -40,9 +44,8 @@ namespace TheRooms.Domain
 
         private static Area[] GetAreas()
         {
-            var area = AreasForShowAndTests.GetAreaForShow();
-            var area2 = AreasForShowAndTests.GetAreaForShow2();
-            return new Area[2] { area, area2 };
+            var area = Room1.GetRoom();
+            return new Area[1] { area };
         }
 
         public static Vector FromPixelToCell(Size pixelSize, Size cellSize, Vector pixel)

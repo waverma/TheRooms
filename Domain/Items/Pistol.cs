@@ -60,6 +60,11 @@ namespace TheRooms.Domain.Items
 
         public event Action StateChanged;
 
+        public Pistol(int bulletCount = 0)
+        {
+            Shop = GunShop.GetPistolShop(bulletCount);
+        }
+
         public Action<Game> GetAction()
         {
             return (Game game) => { };
