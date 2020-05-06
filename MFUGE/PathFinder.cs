@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace TheRooms.MFUGE
     public class PathFinder
     {
         public static SinglyLinkedList<Vector> GetOrdinaryPath(Area area, Vector start, Vector end)
-        { // TEST ME
+        {
             if (!Area.InBounds(area, start) || !Area.InBounds(area, end))
                 return null;
 
@@ -40,7 +41,7 @@ namespace TheRooms.MFUGE
         }
 
         public static IReadOnlyList<Vector> GetFlattenedPath(Area area, IReadOnlyList<Vector> ordinaryPath)
-        { // TEST ME // Fix me
+        {
             var list = ordinaryPath.ToList();
             //list.Reverse();
 
@@ -50,7 +51,7 @@ namespace TheRooms.MFUGE
                 currentPosition
             };
 
-            while(true)
+            while (true)
             {
                 foreach (var vector in list.Skip(1).Where(vector => !IsIntersect(area, currentPosition, vector)))
                 {
@@ -69,6 +70,27 @@ namespace TheRooms.MFUGE
             throw new NotImplementedException();
         }
 
+        private bool IsIntersect(Vector fs, Vector fe, Vector ss, Vector se)
+        { // HELP ME
+            var firstLine = new StraightLineEquation(fs, fe);
+            var secondLine = new StraightLineEquation(ss, se);
+
+            if (firstLine.A == 0 && secondLine.A == 0 || firstLine.B == 0 && secondLine.B == 0) 
+                return firstLine.IsCoincidesWith(secondLine);
+            var point = GetIntersectPoint(firstLine, secondLine);
+
+            return point.IsBetween(fs.ToPoint(), fe.ToPoint()) 
+                   && point.IsBetween(ss.ToPoint(), se.ToPoint());
+        }
+
+        private Point GetIntersectPoint(StraightLineEquation f, StraightLineEquation s)
+        { // HELP ME
+            var x = (f.B * s.C - s.B * f.C) / (f.A * s.B - s.A * f.B);
+            var y = (s.A * f.C - f.A * s.C) / (f.A * s.B - s.A * f.B);
+
+            return new Point(x, y);
+        }
+
         private static IEnumerable<Vector> GetIncidentPoint(Area area, Vector point)
         { // Fix me
             for (var i = -1; i <= 1; i++)
@@ -81,6 +103,32 @@ namespace TheRooms.MFUGE
                     if (area.InBounds(point) && area.Map[point.X, point.Y].IsEmpty())
                         yield return newPoint;
                 }
+        }
+
+
+
+        private class StraightLineEquation
+        {
+            public readonly int A;
+            public readonly int B;
+            public readonly int C;
+
+            public StraightLineEquation(Vector first, Vector second)
+            {
+                A = first.Y - second.Y;
+                B = second.X - first.X;
+                C = first.X * second.Y - first.Y * second.X;
+
+                if (A == B && A == 0) throw new ArgumentException();
+            }
+
+            public bool IsCoincidesWith(StraightLineEquation other)
+            {
+                var fb = -(A / B);
+                var sb = -(other.A / other.B);
+
+                return fb * sb > 0 && C * other.B == other.C * B;
+            }
         }
     }
 }

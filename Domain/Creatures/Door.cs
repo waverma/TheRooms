@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 using TheRooms.Domain.Items;
 using TheRooms.MFUGE;
 
@@ -13,8 +10,8 @@ namespace TheRooms.Domain.Creatures
         public Inventory Inventory { get; set; }
         private readonly Vector _location;
         private readonly Vector _appearanceLocation;
-        private readonly int _appearanceRoom;
-        private bool IsLock;
+        public readonly int AppearanceRoom;
+        private bool _isLock;
         public bool IsMortal => false;
 
         public double Health { get; private set; }
@@ -25,8 +22,8 @@ namespace TheRooms.Domain.Creatures
         {
             _location = location;
             _appearanceLocation = otherRoomLocation;
-            _appearanceRoom = otherRoom;
-            IsLock = isLock;
+            AppearanceRoom = otherRoom;
+            _isLock = isLock;
         }
 
         public void DoDamage(double value)
@@ -38,34 +35,39 @@ namespace TheRooms.Domain.Creatures
 
         public Action<Game> GetAction()
         {
-            throw new NotImplementedException();
+            return game => { };
         }
 
         public Action<Game> GetActionOnClick()
-        { // переделать логику удаления ключa
-            return (Game game) =>
+        { // ПЕРЕДЕЛАТЬ
+            return game =>
             {
-                if (IsLock)
+                if (_isLock)
                 {
                     var keyIndex = -1;
-                    foreach (var item in game._inventoryBlock.LeftInventory.GetItems())
-                        if (item.Item1 is Key)
+                    foreach (var (item, index) in game._inventoryBlock.LeftInventory.GetItems())
+                        if (item is Key)
                         {
-                            keyIndex = item.Item2;
+                            keyIndex = index;
                             break;
                         }
 
                     if (keyIndex != -1)
                     {
                         game._inventoryBlock.LeftInventory.TryPopItem(keyIndex);
-                        IsLock = false;
+                        _isLock = false;
                     }
                 }
 
-                if (!IsLock)
+                if (_isLock) return;
+                var currentArea = game._areaBlock.GetCurrentArea();
+                if (game._areaBlock.TryChangeArea(AppearanceRoom))
                 {
-                    if (game._areaBlock.TryChangeArea(_appearanceRoom))
-                        game._areaBlock.GetCurrentArea().MovePlayer(_appearanceLocation);
+                    game._areaBlock.GetCurrentArea().MovePlayer(_appearanceLocation);
+                    foreach (var cell in game._areaBlock.GetCurrentArea().Map)
+                        if (cell?.Creature is Door door &&
+                                ReferenceEquals(game._areaBlock.GetArea(door.AppearanceRoom), currentArea))
+                            door._isLock = false;
                 }
             };
         }

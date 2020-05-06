@@ -65,32 +65,4 @@ namespace TheRooms.MFUGE
             throw new NotImplementedException();
         }
     }
-
-    public class CellBuilder
-    {
-        public CellBuilder()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Cell AddSky(ISky sky)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Cell AddCreature(ICreature creature)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Cell AddCurrentGround(IGround ground)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Cell Build()
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

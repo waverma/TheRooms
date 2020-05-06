@@ -4,11 +4,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheRooms.Domain;
 
 namespace TheRooms.MFUGE
 {
     public class Player
-    {
+    { // 
         public double Health { get; private set; }
         public double Mind { get; private set; }
         public readonly string Name;
@@ -32,6 +33,29 @@ namespace TheRooms.MFUGE
                 PlayerDeath?.Invoke(); 
             else
                 StateChanged?.Invoke();
+        }
+
+        public void DecreaseMind(double value)
+        {
+            Mind -= value;
+            if (Mind <= 0)
+            {
+                Mind = 0;
+                // СДЕСЬ ДОЛЖНЫ БЫТЬ ГОЛЮНЫ
+            }
+            else
+                StateChanged?.Invoke();
+        }
+
+        public void PeeTo(Cell cell)
+        {
+
+        }
+
+        public Action<Game> GetAction()
+        {
+            DecreaseMind(0.05);
+            return game => { };
         }
 
         public string GetImageDirectory()

@@ -8,19 +8,19 @@ namespace TheRooms.Domain.LogicBlocks
 {
     public class AreaBlock
     {
-        private Area[] Areas;
-        private int CurrentArea;
+        private readonly Area[] _areas;
+        private int _currentArea;
 
         public event Action<List<Vector>> AreaBlockChanged;
 
         public AreaBlock(Area[] areas, int currentArea = 0)
         {
-            Areas = areas;
-            CurrentArea = currentArea > -1 && currentArea < Areas.Length
+            _areas = areas;
+            _currentArea = currentArea > -1 && currentArea < _areas.Length
                 ? currentArea : 0;
 
-            if (Areas.Length == 0)
-                CurrentArea = -1;
+            if (_areas.Length == 0)
+                _currentArea = -1;
 
             if (GetCurrentArea() == null) return;
             GetCurrentArea().CellChanged += AreaBlockChanged_Handler;
@@ -28,17 +28,17 @@ namespace TheRooms.Domain.LogicBlocks
 
         public Area GetCurrentArea()
         {
-            if (CurrentArea < 0 || CurrentArea >= Areas.Length)
+            if (_currentArea < 0 || _currentArea >= _areas.Length)
                 return null;
-            return Areas[CurrentArea];
+            return _areas[_currentArea];
         }
 
         public bool TryChangeArea(int index)
         {
-            if (index <= -1 || index >= Areas.Length) return false;
+            if (index <= -1 || index >= _areas.Length) return false;
 
             GetCurrentArea().CellChanged -= AreaBlockChanged_Handler;
-            CurrentArea = index;
+            _currentArea = index;
             AreaBlockChanged?.Invoke(Vector.GetVectorsArray(GetCurrentArea().Width, GetCurrentArea().Height).ToList());
             GetCurrentArea().CellChanged += AreaBlockChanged_Handler;
 
@@ -50,8 +50,13 @@ namespace TheRooms.Domain.LogicBlocks
             AreaBlockChanged?.Invoke(new List<Vector> { vector });
         }
 
+        public Area GetArea(int index)
+        { // ОПАСНО
+            return _areas[index];
+        }
+
         public Size GetSize()
-        {
+        { // Зачeм?
             throw new NotImplementedException();
         }
     }

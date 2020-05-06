@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using TheRooms.Domain;
 using TheRooms.Domain.Creatures;
 using TheRooms.Domain.Grounds;

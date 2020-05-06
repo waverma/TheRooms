@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheRooms.MFUGE;
 
 namespace TheRooms.Domain.Creatures
@@ -11,7 +7,7 @@ namespace TheRooms.Domain.Creatures
     {
         public double Health { get; private set; }
         private bool IsLock { get; set; }
-        private Vector _location { get; set; }
+        private Vector Location { get; set; }
         public bool IsMortal => false;
 
         public Inventory Inventory { get; set; }
@@ -22,7 +18,7 @@ namespace TheRooms.Domain.Creatures
         public Chest(Inventory inventory, Vector location)
         {
             IsLock = true;
-            _location = location;
+            Location = location;
             Inventory = inventory;
             Health = 100;
         }
@@ -36,12 +32,12 @@ namespace TheRooms.Domain.Creatures
 
         public Action<Game> GetAction()
         {
-            throw new NotImplementedException();
+            return game => { };
         }
 
         public Action<Game> GetActionOnClick()
         {
-            return (Game game) =>
+            return game =>
             {
                 void Lock()
                 {
@@ -59,7 +55,7 @@ namespace TheRooms.Domain.Creatures
 
         public Vector GetLocation()
         {
-            return _location;
+            return Location;
         }
 
         public string GetPictureDirectory()

@@ -71,4 +71,13 @@ namespace TheRooms.MFUGE
             return left.ToPoint() != right.ToPoint();
         }
     }
+
+    public static class PointExt
+    {
+        public static bool IsBetween(this Point source, Point f, Point s)
+        {
+            return f.X <= source.X && source.X <= s.X
+                                   && f.Y <= source.Y && source.Y <= s.Y;
+        }
+    }
 }
