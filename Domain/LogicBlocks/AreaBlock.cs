@@ -55,6 +55,11 @@ namespace TheRooms.Domain.LogicBlocks
             return _areas[index];
         }
 
+        public IEnumerable<Area> GetAreas()
+        {
+            return _areas;
+        }
+
         public Size GetSize()
         { // TODO Зачeм?
             throw new NotImplementedException();

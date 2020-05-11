@@ -54,14 +54,35 @@
   <ItemGroup>
     <Compile Include="Domain\Creatures\AbsolutelyDefaultPeople.cs" />
     <Compile Include="Domain\Creatures\Chest.cs" />
-    <Compile Include="Domain\Creatures\Door.cs" />
-    <Compile Include="Domain\Creatures\ICreator.cs" />
-    <Compile Include="Domain\Creatures\IPeople.cs" />
-    <Compile Include="Domain\Creatures\IRestroom.cs" />
+    <Compile Include="Domain\Creatures\DoorJacket.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Doors.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room10.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room11.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room12.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room13.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room14.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room15.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room16.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room17.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room18.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room19.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room2.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room20.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room3.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room4.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room5.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room6.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room7.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room8.cs" />
+    <Compile Include="Domain\Rooms\Beginning\Room9.cs" />
+    <Compile Include="Domain\TickHandler.cs" />
+    <Compile Include="interfaces\ICreator.cs" />
+    <Compile Include="interfaces\IKey.cs" />
+    <Compile Include="interfaces\IPeople.cs" />
+    <Compile Include="interfaces\IRestroom.cs" />
     <Compile Include="Domain\Creatures\Dialog.cs" />
     <Compile Include="Domain\Game.cs" />
     <Compile Include="Domain\Grounds\Grass.cs" />
-    <Compile Include="Domain\Items\IGun.cs" />
     <Compile Include="Domain\Items\Key.cs" />
     <Compile Include="Domain\Items\Pistol.cs" />
     <Compile Include="Domain\LogicBlocks\AreaBlock.cs" />
@@ -71,6 +92,13 @@
     <Compile Include="Domain\LogicBlocks\PlayerStateBlock.cs" />
     <Compile Include="Domain\Rooms\AreasForShowAndTests.cs" />
     <Compile Include="Domain\Rooms\Beginning\Room1.cs" />
+    <Compile Include="interfaces\IChest.cs" />
+    <Compile Include="interfaces\ICreature.cs" />
+    <Compile Include="interfaces\IDoor.cs" />
+    <Compile Include="interfaces\IGround.cs" />
+    <Compile Include="interfaces\IGun.cs" />
+    <Compile Include="interfaces\IItem.cs" />
+    <Compile Include="interfaces\ISky.cs" />
     <Compile Include="MFUGE\Area.cs" />
     <Compile Include="MFUGE\Cell.cs" />
     <Compile Include="MFUGE\CellContent.cs" />
@@ -139,6 +167,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="View\TheRooms.resx">
+      <DependentUpon>TheRooms.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -159,6 +190,7 @@
   <ItemGroup>
     <Content Include="Dialogs\R1P1.txt" />
     <Content Include="Dialogs\R1P2.txt" />
+    <Content Include="Dialogs\R1P3.txt" />
     <Content Include="Images\chest-closed.png" />
     <Content Include="Images\chest-opened.png" />
     <Content Include="Images\Door.png" />

@@ -28,7 +28,7 @@ namespace TheRooms.Tests
                 new Vector(1, 2)
             };
 
-            var path = PathFinder.GetOrdinaryPath(area, vectors[start], vectors[end]);
+            var path = Path.GetOrdinaryPath(area, vectors[start], vectors[end]);
 
             if (isNull)
                 Assert.IsNull(path);

@@ -3,6 +3,7 @@ using System.Drawing;
 using TheRooms.Domain.Creatures;
 using TheRooms.Domain.Grounds;
 using TheRooms.Domain.Items;
+using TheRooms.interfaces;
 using TheRooms.MFUGE;
 
 namespace TheRooms.Domain.Rooms
@@ -35,7 +36,7 @@ namespace TheRooms.Domain.Rooms
                 [new Point(1, 1)] = new AbsolutelyDefaultPeople(dialog, "Ортем", new Vector(1, 1)),
                 [new Point(18, 18)] = new Chest(inv1, new Vector(18, 18)),
                 [new Point(11, 11)] = new Chest(inv2, new Vector(11, 11))
-                //[new Point(15, 0)] = new Door(new Vector(15, 0), 1, new Vector(15, 2), true)
+                //[new Point(15, 0)] = new DoorJacket(new Vector(15, 0), 1, new Vector(15, 2), true)
             };
 
             for (var x = 1; x < 19; x++)
@@ -46,7 +47,7 @@ namespace TheRooms.Domain.Rooms
                         creatures.ContainsKey(new Point(x, y)) ? creatures[new Point(x, y)] : null,
                         new Grass(new Vector(x, y)));
                 }
-            cells[15, 0] = new Cell(null, new Door(new Vector(15, 0), 1, new Vector(16, 2), true), new Grass(new Vector(15, 0)));
+            cells[15, 0] = new Cell(null, new DoorJacket(new Vector(15, 0), 1, new Vector(16, 2), new Door(0)), new Grass(new Vector(15, 0)));
 
             return new Area(cells, new Vector(5, 5));
         }
@@ -66,7 +67,7 @@ namespace TheRooms.Domain.Rooms
             {
                 [new Point(18, 18)] = new Chest(inv1, new Vector(18, 18)),
                 [new Point(11, 11)] = new Chest(inv2, new Vector(11, 11))
-                //[new Point(15, 0)] = new Door(new Vector(15, 0), 1, new Vector(15, 2), true)
+                //[new Point(15, 0)] = new DoorJacket(new Vector(15, 0), 1, new Vector(15, 2), true)
             };
 
             for (var x = 1; x < 19; x++)
@@ -77,7 +78,7 @@ namespace TheRooms.Domain.Rooms
                         creatures.ContainsKey(new Point(x, y)) ? creatures[new Point(x, y)] : null,
                         new Grass(new Vector(x, y)));
                 }
-            cells[16, 0] = new Cell(null, new Door(new Vector(16, 0), 0, new Vector(15, 2), false), new Grass(new Vector(16, 0)));
+            cells[16, 0] = new Cell(null, new DoorJacket(new Vector(16, 0), 0, new Vector(15, 2), new Door(0)), new Grass(new Vector(16, 0)));
 
             return new Area(cells, new Vector(5, 5));
         }

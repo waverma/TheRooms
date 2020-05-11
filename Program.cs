@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TheRooms.Domain;
+using TheRooms.Domain.Rooms.Beginning;
 
 namespace TheRooms
 {
@@ -15,9 +16,11 @@ namespace TheRooms
         [STAThread]
         static void Main()
         {
+            Doors.CreateDoors();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new TheRooms(new Game()));
+            Application.Run(new View.TheRooms(new Game()));
         }
     }
 }

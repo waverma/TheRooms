@@ -1,5 +1,6 @@
 ﻿using System;
 using TheRooms.Domain;
+using TheRooms.interfaces;
 
 namespace TheRooms.MFUGE
 {
@@ -10,6 +11,8 @@ namespace TheRooms.MFUGE
         public readonly string Name;
         public Inventory Inventory { get; }
         public IItem Hand { get; private set; }
+
+        public Path Path { get; private set; }
 
         public event Action PlayerDeath;
         public event Action StateChanged;
@@ -25,7 +28,10 @@ namespace TheRooms.MFUGE
         {
             Health -= value;
             if (Health <= 0)
-                PlayerDeath?.Invoke(); 
+            {
+                Health = 0;
+                PlayerDeath?.Invoke();
+            }
             else
                 StateChanged?.Invoke();
         }
@@ -38,8 +44,12 @@ namespace TheRooms.MFUGE
                 Mind = 0;
                 // TODO СДЕСЬ ДОЛЖНЫ БЫТЬ ГОЛЮНЫ
             }
-            else
-                StateChanged?.Invoke();
+            StateChanged?.Invoke();
+        }
+
+        public void SetPath(Path path)
+        {
+            this.Path = path;
         }
 
         public void PeeTo(Cell cell)
@@ -50,7 +60,12 @@ namespace TheRooms.MFUGE
         public Action<Game> GetAction()
         {
             DecreaseMind(0.05);
-            return game => { };
+            return game =>
+            {
+                var currentVector = Path?.GetNext();
+                if (currentVector != null)
+                    game.AreaBlock.GetCurrentArea().MovePlayer((Vector)currentVector);
+            };
         }
 
         public string GetImageDirectory()

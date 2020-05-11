@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using TheRooms.Domain.Creatures;
 using TheRooms.Domain.Grounds;
 using TheRooms.Domain.Items;
@@ -34,7 +33,7 @@ namespace TheRooms.Domain.Rooms.Beginning
 
             v = new Vector(8, 8);
             inv = new Inventory(10);
-            inv.TryPutItem(new Key());
+            inv.TryPutItem(new Key(0));
             map[v.X, v.Y] = map[v.X, v.Y].AddCreature(new Chest(inv, v));
 
             v = new Vector(10, 8);
@@ -54,8 +53,9 @@ namespace TheRooms.Domain.Rooms.Beginning
             dialog = File.ReadAllLines(Game.Dialogs + "R1P2.txt");
             map[v.X, v.Y] = map[v.X, v.Y].AddCreature(new AbsolutelyDefaultPeople(new Dialog(dialog, "Jules"), "Jules", v));
 
+            // двери
             v = new Vector(14, 3);
-            map[v.X, v.Y] = new Cell(null, new Door(v, 2, new Vector(1, 3), false), new Grass(v));
+            map[v.X, v.Y] = new Cell(null, new DoorJacket(v, 1, new Vector(1, 3), Doors.BegDoors[0]), new Grass(v));
 
 
             return new Area(map, playerLocation);

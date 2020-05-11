@@ -1,4 +1,5 @@
 ﻿using System;
+using TheRooms.interfaces;
 
 namespace TheRooms.MFUGE
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TheRooms.Domain;
+using TheRooms.interfaces;
 
 namespace TheRooms.MFUGE
 {
@@ -67,14 +67,5 @@ namespace TheRooms.MFUGE
             other.TryPutItem(item);
             return true;
         }
-    }
-
-    public interface IItem
-    { //  TODO ПЕРЕНЕСТИ В ДРУГОЕ МЕТСО
-        // Но это не точно.
-        Action<Game> GetAction();
-        string GetPictureDirectory();
-
-        event Action StateChanged;
     }
 }

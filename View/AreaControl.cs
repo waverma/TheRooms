@@ -5,18 +5,31 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using TheRooms.Domain;
-using TheRooms.Domain.Items;
-using TheRooms.Domain.LogicBlocks;
+using TheRooms.interfaces;
 using TheRooms.MFUGE;
+using Timer = System.Windows.Forms.Timer;
 
 namespace TheRooms.View
 {
     public partial class AreaControl : UserControl
     {
-        private readonly Game _game;//избавиться
-        private Area Area => _game.AreaBlock.GetCurrentArea();
-        private Vector PlayerLocation => Game.FromCellToPixel(Size, _game.AreaBlock.GetCurrentArea().Size, _game.AreaBlock.GetCurrentArea().PlayerLocation);
-        private Size _cellSize => new Size(this.Size.Width / _game.AreaBlock.GetCurrentArea().Width, this.Size.Height / _game.AreaBlock.GetCurrentArea().Height);
+        private readonly Game game;
+        private Area Area => game.AreaBlock.GetCurrentArea();
+        private Vector PlayerLocation => Game.FromCellToPixel(new Size(CellSize.Width * Area.Width, CellSize.Width * Area.Height), game.AreaBlock.GetCurrentArea().Size, game.AreaBlock.GetCurrentArea().PlayerLocation);
+        private Size CellSize
+        {
+            get
+            {
+                var cellW = Size.Width / Area.Width;
+                var cellH = Size.Height / Area.Height;
+                return cellW < cellH
+                    ? new Size(cellW, cellW)
+                    : new Size(cellH, cellH);
+            }
+        }
+
+        private Point SizeShift => new Point((Size.Width - CellSize.Width * Area.Width) / 2,
+            (Size.Height - CellSize.Height * Area.Height) / 2);
 
         private Image BlackSpaceImage => new Bitmap(@"Images\Path.png");
         private Image PlayerImage => throw new NotImplementedException();
@@ -26,21 +39,25 @@ namespace TheRooms.View
         private readonly Dictionary<int, Image> PlacedCreature;
         private readonly Dictionary<int, Image> PlacedSky;
 
-        private readonly Graphics G;
-
         public AreaControl(Game save)
         {
-            BackColor = Color.Aquamarine;
-
             InitializeComponent();
-            _game = save;
-            DoubleBuffered = true;
+            game = save;
+
             Size = new Size(1001, 528);
 
             Resize += HandleResize;
             Click += HandleClick;
             DoubleClick += HandleDoubleClick;
             Area.CellChanged += AreaOnCellChanged;
+
+            var timer = new Timer { Interval = 41 };
+            timer.Tick += (sender, args) =>
+            {
+                game.TickHandler.OnTick();
+                Refresh();
+            };
+            timer.Start();
         }
 
         private void AreaOnCellChanged(Vector obj)
@@ -50,70 +67,42 @@ namespace TheRooms.View
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            BackColor = Color.Brown;
+            DoubleBuffered = true;
             ShowArea(e.Graphics);
             ShowPlayer(e.Graphics);
         }
 
         private void HandleDoubleClick(object sender, EventArgs e)
         {
-            if (!(e is MouseEventArgs args)) return;
-            var clickLocation = new Vector(args.Location);
-            var cell = Game.FromPixelToCell(this.Size, new Size(Area.Width, Area.Height), clickLocation);
-            var currentCell = Area.Map[cell.X, cell.Y];
-            if (currentCell.Creature is null) return;
-            MessageBox.Show(currentCell.Creature.Health.ToString());
+            //if (!(e is MouseEventArgs args)) return;
+            //var clickLocation = new Vector(args.Location);
+            //var cell = Game.FromPixelToCell(this.Size, new Size(Area.Width, Area.Height), clickLocation);
+            //var currentCell = Area.Map[cell.X, cell.Y];
+            //if (currentCell.Creature is null) return;
+            //MessageBox.Show(currentCell.Creature.Health.ToString());
         }
 
         private void HandleClick(object sender, EventArgs e)
         {
             if (!(e is MouseEventArgs args)) return;
-            var clickLocation = new Vector(args.Location);
-            var cell = Game.FromPixelToCell(this.Size, new Size(Area.Width, Area.Height), clickLocation);
-
-            if (_game.AreaBlock.GetCurrentArea().PlayerLocation == cell)
-                return;
-
-            var currentCell = Area.Map[cell.X, cell.Y];
-            if (currentCell is null) return;
-            if (currentCell.Creature is null)
-            {
-                _game.InventoryBlock.RemoveRightInventory();
-                var path = Area.FindPathOrDefault(_game.AreaBlock.GetCurrentArea().PlayerLocation, cell);
-
-                if (path == null) return;
-                MovePlayer(path);
-                //Area.MovePlayer(cell);
-                return;
-            }
-
-            if (!Area.PlayerLocation.IsNeighboringVector(cell))
-            {
-                if (currentCell.Creature == null)
-                    return;
-                if (_game.PlayerStateBlock.Player.Hand is IGun gun)
-                    gun.TryShot(currentCell);
-                return;
-            }
-            // интерактирование с существом
-            var creatureAction = Area.Map[cell.X, cell.Y].Creature.GetActionOnClick();
-            creatureAction(_game);
-
+            var clickLocation = new Vector(args.Location.X - SizeShift.X, args.Location.Y - SizeShift.Y);
+            var cell = Game.FromPixelToCell(new Size(CellSize.Width * Area.Width, CellSize.Width * Area.Height), new Size(Area.Width, Area.Height), clickLocation);
+            game.TickHandler.Click(cell);
             Invalidate();
         }
 
         private void HandleResize(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void ShowArea(Graphics g)
         {
-            var cellSize = new Size(Size.Width / Area.Width, Size.Height / Area.Height);
-
             for (var x = 0; x < Area.Width; x++)
                 for (var y = 0; y < Area.Height; y++)
                 {
-                    var currentCellLocation = new Point(x * cellSize.Width, y * cellSize.Height);
+                    var currentCellLocation = new Point(x * CellSize.Width + SizeShift.X, y * CellSize.Height + SizeShift.Y);
                     if (Area.Map[x, y] is null)
                     {
                         PaintCell(g, currentCellLocation, BlackSpaceImage, null, null);
@@ -158,39 +147,25 @@ namespace TheRooms.View
         private void PaintCell(Graphics g, Point location, Image groundImage, Image creatureImage, Image skyImage)
         {
             if (groundImage != null)
-                g.DrawImage(groundImage, new Rectangle(location, _cellSize));
+                g.DrawImage(groundImage, new Rectangle(location, CellSize));
             if (creatureImage != null)
-                g.DrawImage(creatureImage, new Rectangle(location, _cellSize));
+                g.DrawImage(creatureImage, new Rectangle(location, CellSize));
             if (skyImage != null)
-                g.DrawImage(skyImage, new Rectangle(location, _cellSize));
-        }
-
-        private void PlaceGround(string pictureName, Point location)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void PlaceCreature(string pictureName, Point location)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void PlaceSky(string pictureName, Point location)
-        {
-            throw new NotImplementedException();
+                g.DrawImage(skyImage, new Rectangle(location, CellSize));
         }
 
         private void ShowPlayer(Graphics g)
         {
-            g.DrawImage(new Bitmap(_game.PlayerStateBlock.Player.GetImageDirectory()),
-                    new Rectangle(new Point(PlayerLocation.X - _cellSize.Width / 2, PlayerLocation.Y - _cellSize.Height / 2), _cellSize));
+            var size = new Size(CellSize.Width * Area.Width, CellSize.Width * Area.Height);
+            g.DrawImage(new Bitmap(game.PlayerStateBlock.Player.GetImageDirectory()),
+                    new Rectangle(new Point(PlayerLocation.X - CellSize.Width / 2 + SizeShift.X, PlayerLocation.Y - CellSize.Height / 2 + SizeShift.Y), CellSize));
         }
 
         private void MovePlayer(IEnumerable<Vector> path)
         {
             foreach (var vector in path.Skip(1))
             {
-                _game.AreaBlock.GetCurrentArea().MovePlayer(vector);
+                game.AreaBlock.GetCurrentArea().MovePlayer(vector);
                 Refresh();
                 Thread.Sleep(35);
             }

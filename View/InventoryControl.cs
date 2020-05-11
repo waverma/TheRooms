@@ -1,7 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using TheRooms.Domain;
 using TheRooms.MFUGE;
@@ -18,15 +15,14 @@ namespace TheRooms.View
     {
         private readonly Game _game;
 
-        private readonly Panel _playerInventoryPanel;
-        private readonly Panel _creatureInventoryPanel;
-        private readonly Panel _inventoriesControls;
+        private readonly TableLayoutPanel _playerInventoryPanel;
+        private readonly TableLayoutPanel _creatureInventoryPanel;
+        private readonly TableLayoutPanel _inventoriesControls;
 
         private readonly Button AllToLeftButton;
         private readonly Button AllToRightButton;
         private readonly Button ToLeftButton;
         private readonly Button ToRightButton;
-        private readonly Button CloseButton;
 
         private int SelectedLeftItem { get; set; } = -1;
         private int SelectedRightItem { get; set; } = -1;
@@ -34,60 +30,47 @@ namespace TheRooms.View
         public InventoryControl(Game game)
         {
             game.InventoryBlock.InventoryBlockChanged += Refresh;
-            DoubleBuffered = true;
             _game = game;
-            BackColor = Color.RoyalBlue;
+            
             Size = new Size(115 * 11, 99);
 
-            _playerInventoryPanel = new Panel();
-            _creatureInventoryPanel = new Panel();
-            _inventoriesControls = new Panel();
+            _playerInventoryPanel = new TableLayoutPanel { ColumnCount = 5, RowCount = 2 };
+            for (var i = 0; i < 5; i++)
+                _playerInventoryPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
+            for (var i = 0; i < 2; i++)
+                _playerInventoryPanel.RowStyles.Add(new RowStyle(SizeType.Percent));
 
-            ToRightButton = new Button { Text = ">" };
+            _creatureInventoryPanel = new TableLayoutPanel();
+            for (var i = 0; i < 5; i++)
+                _creatureInventoryPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
+            for (var i = 0; i < 2; i++)
+                _creatureInventoryPanel.RowStyles.Add(new RowStyle(SizeType.Percent));
+
+            _inventoriesControls = new TableLayoutPanel();
+            _inventoriesControls.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
+            _inventoriesControls.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
+            _inventoriesControls.RowStyles.Add(new RowStyle(SizeType.Percent));
+            _inventoriesControls.RowStyles.Add(new RowStyle(SizeType.Percent));
+            _inventoriesControls.RowStyles[0].Height = 50;
+            _inventoriesControls.RowStyles[1].Height = 50;
+            _inventoriesControls.ColumnStyles[0].Width = 50;
+            _inventoriesControls.ColumnStyles[1].Width = 50;
+
+            ToRightButton = new Button { Text = ">", BackColor = Color.Brown, Dock = DockStyle.Fill};
             ToRightButton.Click += (sender, args) =>
-            {
                 _game.InventoryBlock.TryMoveItemToRightInventory(SelectedLeftItem);
-            };
 
-            AllToRightButton = new Button { Text = ">>>" };
+            AllToRightButton = new Button { Text = ">>>", BackColor = Color.Brown, Dock = DockStyle.Fill };
             AllToRightButton.Click += (sender, args) =>
-            {
                 _game.InventoryBlock.TryMoveAllItemsToRightInventory();
-            };
 
-            var c = new Button
-            {
-                Size = new Size(33, 33),
-                Location = new Point(13 * 11, 0)
-            };
-            c.Click += (sender, args) =>
-            {
-                if (SelectedLeftItem == -1) return;
-                var item = _game.InventoryBlock.LeftInventory.Items[SelectedLeftItem];
-                if (item == null) return;
-                var oldItem = _game.PlayerStateBlock.Player.PutInHand(item);
-                _game.InventoryBlock.LeftInventory.TryPopItem(SelectedLeftItem);
-                _game.InventoryBlock.LeftInventory.TryPutItem(oldItem);
-                Refresh();
-            };
-
-            AllToLeftButton = new Button { Text = "<<<" };
+            AllToLeftButton = new Button { Text = "<<<", BackColor = Color.Brown, Dock = DockStyle.Fill };
             AllToLeftButton.Click += (sender, args) =>
-            {
                 _game.InventoryBlock.TryMoveAllItemsToLeftInventory();
-            };
 
-            ToLeftButton = new Button { Text = "<" };
+            ToLeftButton = new Button { Text = "<", BackColor = Color.Brown, Dock = DockStyle.Fill };
             ToLeftButton.Click += (sender, args) =>
-            {
                 _game.InventoryBlock.TryMoveItemToLeftInventory(SelectedRightItem);
-            };
-
-            CloseButton = new Button { Text = "Close" };
-            CloseButton.Click += (sender, args) =>
-            {
-                _game.InventoryBlock.RemoveRightInventory();
-            };
 
             // Когда я это переношу в OnPaint все начинает ломаться
             ToRightButton.Size = new Size(55, 22);
@@ -101,78 +84,78 @@ namespace TheRooms.View
 
             ToLeftButton.Size = new Size(55, 22);
             ToLeftButton.Location = new Point(23 * 11, 0);
-
-            CloseButton.Size = new Size(55, 33);
-            CloseButton.Location = new Point(23 * 11, 44);
-
-
             Controls.Add(_playerInventoryPanel);
             Controls.Add(_creatureInventoryPanel);
             Controls.Add(_inventoriesControls);
 
-            _inventoriesControls.Controls.Add(ToRightButton);
-            _inventoriesControls.Controls.Add(AllToRightButton);
-            _inventoriesControls.Controls.Add(c);
-            _inventoriesControls.Controls.Add(AllToLeftButton);
-            _inventoriesControls.Controls.Add(ToLeftButton);
-            _inventoriesControls.Controls.Add(CloseButton);
+            _inventoriesControls.Controls.Add(ToRightButton, 0, 0);
+            _inventoriesControls.Controls.Add(AllToRightButton, 0, 1);
+            _inventoriesControls.Controls.Add(AllToLeftButton, 1, 1);
+            _inventoriesControls.Controls.Add(ToLeftButton, 1, 0);
+
 
             Draw();
+            ShowInventory(_playerInventoryPanel, Orientation.Left);
+            ShowInventory(_creatureInventoryPanel, Orientation.Right);
+
             InitializeComponent();
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
+            DoubleBuffered = true;
+            BackColor = Color.Brown;
 
             var i = 0;
             foreach (Control control in _playerInventoryPanel.Controls)
-            { // А ВОТ ЗДЕСЬ ЗАРАБОТАЛО
                 control.Text = _game?.InventoryBlock?.LeftInventory?.Items[i++]?.GetType().Name;
-
-                //var picturePath = _game?._inventoryBlock?.LeftInventory?.Items[i++]?.GetPictureDirectory();
-                //if (picturePath != null)
-                //    control.CreateGraphics().DrawImage(new Bitmap(picturePath), new Rectangle(Point.Empty, new Size(44, 22)));
-            }
 
             i = 0;
             foreach (Control control in _creatureInventoryPanel.Controls)
-            {
                 control.Text = _game?.InventoryBlock?.RightInventory?.Items[i++]?.GetType().Name;
 
-                //var picturePath = _game?._inventoryBlock?.RightInventory?.Items[i++]?.GetPictureDirectory();
-                //if (picturePath != null)
-                //    control.CreateGraphics().DrawImage(new Bitmap(picturePath), new Rectangle(Point.Empty, new Size(44, 22)));
-
-                //Graphics.FromImage(((PictureBox)control).Image).DrawImage(new Bitmap(picturePath), new Rectangle(Point.Empty, new Size(44, 22)));
-            }
-
+            Draw();
             _playerInventoryPanel.Visible = _game.InventoryBlock.LeftInventory != null;
             _creatureInventoryPanel.Visible = _game.InventoryBlock.RightInventory != null;
             _inventoriesControls.Visible = _game.InventoryBlock.RightInventory != null;
         }
 
         private void Draw()
-        {
-            _playerInventoryPanel.Size = new Size(30 * 11, 77);
-            _playerInventoryPanel.Location = new Point(13 * 11, 11);
-            _playerInventoryPanel.BackColor = Color.Aqua;
-            ShowInventory(_playerInventoryPanel, Orientation.Left);
+        { // 3.8 // 9.5
+            _playerInventoryPanel.Size = new Size((int)(Size.Width / 3.8), 77);
+            _playerInventoryPanel.Location = new Point((int)(Size.Width / 9.5), 11);
+            _playerInventoryPanel.BackColor = Color.Transparent;
 
+            _creatureInventoryPanel.Size = new Size((int)(Size.Width / 3.8), 77);
+            _inventoriesControls.Size = new Size(Size.Width - ((int)(Size.Width / 3.8) + (int)(Size.Width / 9.5)) * 2, 77);
 
-            _creatureInventoryPanel.Size = new Size(30 * 11, 77);
-            _inventoriesControls.Size = new Size(29 * 11, 77);
+            _creatureInventoryPanel.Location = new Point(Size.Width - (int)(Size.Width / 3.8) - (int)(Size.Width / 9.5), 11);
+            _inventoriesControls.Location = new Point((int)(Size.Width / 3.8) + (int)(Size.Width / 9.5), 11);
 
-            _creatureInventoryPanel.Location = new Point(72 * 11, 11);
-            _inventoriesControls.Location = new Point(43 * 11, 11);
+            _creatureInventoryPanel.BackColor = Color.Transparent;
+            _inventoriesControls.BackColor = Color.Transparent;
 
-            _creatureInventoryPanel.BackColor = Color.Aqua;
-            _inventoriesControls.BackColor = Color.BlueViolet;
+            for (var j = 0; j < _playerInventoryPanel.RowStyles.Count; j++)
+            {
+                _playerInventoryPanel.RowStyles[j].SizeType = SizeType.Percent;
+                _playerInventoryPanel.RowStyles[j].Height = 50;
 
-            ShowInventory(_creatureInventoryPanel, Orientation.Right);
+                _creatureInventoryPanel.RowStyles[j].SizeType = SizeType.Percent;
+                _creatureInventoryPanel.RowStyles[j].Height = 50;
+            }
+
+            for (var j = 0; j < _playerInventoryPanel.ColumnStyles.Count; j++)
+            {
+                _playerInventoryPanel.ColumnStyles[j].SizeType = SizeType.Percent;
+                _playerInventoryPanel.ColumnStyles[j].Width = 20;
+
+                _creatureInventoryPanel.ColumnStyles[j].SizeType = SizeType.Percent;
+                _creatureInventoryPanel.ColumnStyles[j].Width = 20;
+            }
         }
 
-        private void ShowInventory(Panel panel, Orientation orientation)
+        private void ShowInventory(TableLayoutPanel panel, Orientation orientation)
         {
             var i = 0;
             var startPoint = new Vector(11, 11);
@@ -182,56 +165,55 @@ namespace TheRooms.View
                 {
                     var picturePath = _game?.InventoryBlock?.RightInventory?.Items[i]?.GetPictureDirectory();
 
-                    var itemPicture = new Button
+                    panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
+
+                    var itemPicture = new Label
                     {
                         Name = (i).ToString(),
-                        //Enabled = false,
-                        BackColor = Color.Chartreuse,
-                        //Tag = i++,
-                        Size = new Size(44, 22),
-                        Location = startPoint.ToPoint()
+                        //BackColor = Color.White,
+                        BorderStyle = BorderStyle.FixedSingle,
+                        Location = startPoint.ToPoint(),
+                        TextAlign = ContentAlignment.MiddleCenter
                     };
-                    //if (picturePath != null) itemPicture.Image = new Bitmap(picturePath);
                     i++;
 
                     startPoint += new Vector(66, 0);
 
                     itemPicture.Click += (sender, args) =>
                     {
-                        if (SelectedLeftItem != -1)
-                            foreach (var control in _playerInventoryPanel.Controls.Find(SelectedLeftItem.ToString(), false))
-                                control.BackColor = Color.Chartreuse;
-                        if (SelectedRightItem != -1)
-                            foreach (var control in _creatureInventoryPanel.Controls.Find(SelectedRightItem.ToString(), false))
-                                control.BackColor = Color.Chartreuse;
-
                         var picture = (Control)sender;
                         if (orientation == Orientation.Right)
                             SelectedRightItem = int.Parse(picture.Name);
                         else
                             SelectedLeftItem = int.Parse(picture.Name);
-                        //picture.BackColor = Color.Black;
                     };
 
-                    //itemPicture.DoubleClick += (sender, args) =>
-                    //{
-                    //    var picture = (Control)sender;
-                    //    if (orientation == Orientation.Right)
-                    //        SelectedRightItem = int.Parse(picture.Name);
-                    //    else
-                    //        SelectedLeftItem = int.Parse(picture.Name);
+                    itemPicture.DoubleClick += (sender, args) =>
+                    {
+                        var picture = (Control)sender;
+                        int currentSelectedItem;
+                        Inventory currentInventory;
+                        if (orientation == Orientation.Right)
+                        {
+                            currentSelectedItem = SelectedRightItem = int.Parse(picture.Name);
+                            currentInventory = _game.InventoryBlock.RightInventory;
+                        }
+                        else
+                        {
+                            currentSelectedItem = SelectedLeftItem = int.Parse(picture.Name);
+                            currentInventory = _game.InventoryBlock.LeftInventory;
+                        }
 
-                    //    if (orientation == Orientation.Left)
-                    //    {
-                    //        _game._inventoryBlock.TryMoveItemToRightInventory(SelectedLeftItem);
-                    //    }
-                    //    else
-                    //    {
-                    //        _game._inventoryBlock.TryMoveItemToLeftInventory(SelectedRightItem);
-                    //    }
-                    //};
+                        if (currentSelectedItem == -1) return;
+                        var item = currentInventory.Items[currentSelectedItem];
+                        if (item == null) return;
+                        var oldItem = _game.PlayerStateBlock.Player.PutInHand(item);
+                        currentInventory.TryPopItem(currentSelectedItem);
+                        currentInventory.TryPutItem(oldItem);
+                        Refresh();
+                    };
 
-                    panel.Controls.Add(itemPicture);
+                    panel.Controls.Add(itemPicture, x, y);
                 }
                 startPoint += new Vector(-66 * 5, 33);
             }

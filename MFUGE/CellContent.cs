@@ -1,38 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using TheRooms.Domain;
+using TheRooms.interfaces;
 
 namespace TheRooms.MFUGE
 {
-    public interface ICreature
-    {// TODO Разнести интерфейсы на абстракции
-        event Action<Vector> StateChanged;
-        double Health { get; }
-        bool IsMortal { get; }
-
-        Inventory Inventory { get; }
-        Action<Game> GetActionOnClick();
-        Action<Game> GetAction();
-        void DoDamage(double value);
-        string GetPictureDirectory();
-        Vector GetLocation();
-    }
-
-    public interface IGround
-    {
-        Action<Game> GetAction();
-        string GetPictureDirectory();
-        Vector GetLocation();
-    }
-
-    public interface ISky
-    {
-        Action<Game> GetAction();
-        void DoDamage(double value);
-        string GetPictureDirectory();
-        Vector GetLocation();
-    }
-
     public class CellContent
     {
         private static Dictionary<string, Func<ISky>> SkyKind;

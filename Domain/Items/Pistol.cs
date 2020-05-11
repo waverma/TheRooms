@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TheRooms.interfaces;
 using TheRooms.MFUGE;
 
 namespace TheRooms.Domain.Items

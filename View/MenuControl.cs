@@ -11,7 +11,7 @@ namespace TheRooms.View
         private readonly Game _game;
         private readonly IReadOnlyDictionary<string, Action<Game>> _buttonsFunction;
         private Size CurrentSize => new Size(132, 528);
-        private Size ButtonSize => new Size(88, 55);
+        private Size ButtonSize => new Size(88, (int)(ClientSize.Height / 9.6));
 
         private readonly Button _playPauseButton;
         private readonly Button _settingsButton;
@@ -64,11 +64,30 @@ namespace TheRooms.View
             _showSavesPauseButton.Click += _showSavesPauseButton_Click;
             _exitButton.Click += _ExitButton_Click;
 
-            Controls.Add(_playPauseButton);
-            Controls.Add(_settingsButton);
-            Controls.Add(_saveButton);
-            Controls.Add(_showSavesPauseButton);
+            //Controls.Add(_playPauseButton);
+            //Controls.Add(_settingsButton);
+            //Controls.Add(_saveButton);
+            //Controls.Add(_showSavesPauseButton);
             Controls.Add(_exitButton);
+
+            Resize += (sender, args) => Draw();
+
+            Draw();
+        }
+
+        private void Draw()
+        {
+            //_playPauseButton.Size = ButtonSize;
+            //_settingsButton.Size = ButtonSize;
+            //_saveButton.Size = ButtonSize;
+            //_showSavesPauseButton.Size = ButtonSize;
+            _exitButton.Size = new Size(88, (int)(ClientSize.Height / 9.6));
+
+            //_playPauseButton.Location = new Point(22, 11);
+            //_settingsButton.Location = new Point(22, 88);
+            //_saveButton.Location = new Point(22, 165);
+            //_showSavesPauseButton.Location = new Point(22, 242);
+            _exitButton.Location = new Point(22, (int)(ClientSize.Height / 1.1428571428571));
         }
 
         private void _ExitButton_Click(object sender, EventArgs e)
@@ -98,19 +117,9 @@ namespace TheRooms.View
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            BackColor = Color.Aqua;
+            BackColor = Color.Brown;
 
-            _playPauseButton.Size = ButtonSize;
-            _settingsButton.Size = ButtonSize;
-            _saveButton.Size = ButtonSize;
-            _showSavesPauseButton.Size = ButtonSize;
-            _exitButton.Size = ButtonSize;
 
-            _playPauseButton.Location = new Point(22, 11);
-            _settingsButton.Location = new Point(22, 88);
-            _saveButton.Location = new Point(22, 165);
-            _showSavesPauseButton.Location = new Point(22, 242);
-            _exitButton.Location = new Point(22, 451);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace TheRooms
+﻿namespace TheRooms.View
 {
     partial class TheRooms
     {

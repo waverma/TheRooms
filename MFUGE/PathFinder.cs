@@ -5,8 +5,23 @@ using System.Linq;
 
 namespace TheRooms.MFUGE
 {
-    public class PathFinder
+    public class Path
     {
+        private readonly Stack<Vector> path = new Stack<Vector>();
+
+        public Path(IEnumerable<Vector> vectors)
+        {
+            foreach (var vector in vectors.Reverse())
+                path.Push(vector);
+        }
+
+        public Vector? GetNext()
+        {
+            return path.Count == 0
+                ? (Vector?)null
+                : path.Pop();
+        }
+
         public static SinglyLinkedList<Vector> GetOrdinaryPath(Area area, Vector start, Vector end)
         {
             if (!Area.InBounds(area, start) || !Area.InBounds(area, end))
@@ -72,11 +87,11 @@ namespace TheRooms.MFUGE
             var firstLine = new StraightLineEquation(fs, fe);
             var secondLine = new StraightLineEquation(ss, se);
 
-            if (firstLine.A == 0 && secondLine.A == 0 || firstLine.B == 0 && secondLine.B == 0) 
+            if (firstLine.A == 0 && secondLine.A == 0 || firstLine.B == 0 && secondLine.B == 0)
                 return firstLine.IsCoincidesWith(secondLine);
             var point = GetIntersectPoint(firstLine, secondLine);
 
-            return point.IsBetween(fs.ToPoint(), fe.ToPoint()) 
+            return point.IsBetween(fs.ToPoint(), fe.ToPoint())
                    && point.IsBetween(ss.ToPoint(), se.ToPoint());
         }
 

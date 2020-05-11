@@ -8,7 +8,10 @@ namespace TheRooms.Domain
 {
     public enum GameState
     {
-
+        Play,
+        Pause,
+        Exit,
+        Saves
     }
 
     public class Game
@@ -23,6 +26,9 @@ namespace TheRooms.Domain
         public readonly MenuBlock MenuBlock;
         public readonly PlayerStateBlock PlayerStateBlock;
 
+        public readonly TickHandler TickHandler;
+
+        private GameState GameState { get;  set; }
         public event Action<GameState> StateChanged;
 
         public Game()
@@ -32,6 +38,8 @@ namespace TheRooms.Domain
 
         public Game(Area[] areas, int currentArea = 0, Player player = null)
         {
+            Doors.CreateDoors();
+            
             if (player == null)
                 player = new Player("Unknown", new Inventory(10));
 
@@ -40,12 +48,22 @@ namespace TheRooms.Domain
             DialogBlock = new DialogBlock();
             MenuBlock = new MenuBlock();
             PlayerStateBlock = new PlayerStateBlock(player);
+            TickHandler = new TickHandler(this);
+
         }
 
         private static Area[] GetAreas()
         {
-            var area = Room1.GetRoom();
-            return new Area[1] { area };
+            var area1 = Room1.GetRoom();
+            var area2 = Room2.GetRoom();
+            var area3 = Room3.GetRoom();
+            return new Area[3] { area1, area2, area3 };
+        }
+
+        public void StopGame()
+        {
+            GameState = GameState.Exit;
+            StateChanged?.Invoke(GameState);
         }
 
         public static Vector FromPixelToCell(Size pixelSize, Size cellSize, Vector pixel)

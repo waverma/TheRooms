@@ -1,28 +1,28 @@
 ﻿using System;
-using TheRooms.Domain.Items;
+using TheRooms.interfaces;
 using TheRooms.MFUGE;
 
 namespace TheRooms.Domain.Creatures
 {
-    public class Door : ICreature
+    public class DoorJacket : ICreature
     {
         public Inventory Inventory { get; set; }
         private readonly Vector location;
         private readonly Vector appearanceLocation;
         public readonly int AppearanceRoom;
-        private bool isLock;
         public bool IsMortal => false;
+        private readonly IDoor door;
 
         public double Health { get; private set; }
 
         public event Action<Vector> StateChanged;
 
-        public Door(Vector location, int otherRoom, Vector otherRoomLocation, bool isLock)
+        public DoorJacket(Vector location, int otherRoom, Vector otherRoomLocation, IDoor door)
         {
             this.location = location;
             appearanceLocation = otherRoomLocation;
             AppearanceRoom = otherRoom;
-            this.isLock = isLock;
+            this.door = door;
         }
 
         public void DoDamage(double value)
@@ -38,36 +38,19 @@ namespace TheRooms.Domain.Creatures
         }
 
         public Action<Game> GetActionOnClick()
-        { // TODO ПЕРЕДЕЛАТЬ
+        {
             return game =>
             {
-                if (isLock)
+                if (door.IsLock)
                 {
-                    var keyIndex = -1;
-                    foreach (var (item, index) in game.InventoryBlock.LeftInventory.GetItems())
-                        if (item is Key)
-                        {
-                            keyIndex = index;
-                            break;
-                        }
-
-                    if (keyIndex != -1)
-                    {
-                        game.InventoryBlock.LeftInventory.TryPopItem(keyIndex);
-                        isLock = false;
-                    }
+                    var item = game.PlayerStateBlock.Player.Hand;
+                    if (!(item is IKey)) return;
+                    door.UnLock((IKey)item);
+                    if (door.IsLock) return;
                 }
 
-                if (isLock) return;
-                var currentArea = game.AreaBlock.GetCurrentArea();
                 if (game.AreaBlock.TryChangeArea(AppearanceRoom))
-                {
                     game.AreaBlock.GetCurrentArea().MovePlayer(appearanceLocation);
-                    foreach (var cell in game.AreaBlock.GetCurrentArea().Map)
-                        if (cell?.Creature is Door door &&
-                                ReferenceEquals(game.AreaBlock.GetArea(door.AppearanceRoom), currentArea))
-                            door.isLock = false;
-                }
             };
         }
 
@@ -79,6 +62,30 @@ namespace TheRooms.Domain.Creatures
         public string GetPictureDirectory()
         {
             return @"Images\Door.png";
+        }
+    }
+
+    public class Door : IDoor
+    {
+        public bool IsLock { get; private set; }
+        public int Index { get; }
+
+        public Door(int index, bool isLock = true)
+        {
+            IsLock = isLock;
+            Index = index;
+        }
+
+        public void UnLock(IKey key)
+        {
+            if (Index != key.DoorIndex) return;
+            IsLock = false;
+        }
+
+        public void Lock(IKey key)
+        {
+            if (Index != key.DoorIndex) return;
+            IsLock = true;
         }
     }
 }

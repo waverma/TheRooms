@@ -1,6 +1,7 @@
-﻿using TheRooms.MFUGE;
+﻿using TheRooms.Domain.Items;
+using TheRooms.MFUGE;
 
-namespace TheRooms.Domain.Items
+namespace TheRooms.interfaces
 {
     public interface IGun : IItem
     {

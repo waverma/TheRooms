@@ -1,6 +1,4 @@
-﻿using TheRooms.MFUGE;
-
-namespace TheRooms.Domain.Creatures
+﻿namespace TheRooms.interfaces
 {
     public interface ICreator : ICreature
     {
