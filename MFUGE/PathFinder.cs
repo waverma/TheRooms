@@ -8,6 +8,8 @@ namespace TheRooms.MFUGE
     public class Path
     {
         private readonly Stack<Vector> path = new Stack<Vector>();
+        public bool IsEmpty => path.Count == 0;
+        public Vector Peek => path.Peek();
 
         public Path(IEnumerable<Vector> vectors)
         {

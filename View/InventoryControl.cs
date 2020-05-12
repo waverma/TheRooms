@@ -170,9 +170,9 @@ namespace TheRooms.View
                     var itemPicture = new Label
                     {
                         Name = (i).ToString(),
-                        //BackColor = Color.White,
+                        BackColor = Color.OrangeRed,
                         BorderStyle = BorderStyle.FixedSingle,
-                        Location = startPoint.ToPoint(),
+                        //Location = startPoint.ToPoint(),
                         TextAlign = ContentAlignment.MiddleCenter
                     };
                     i++;

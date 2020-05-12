@@ -39,7 +39,7 @@ namespace TheRooms.Domain.Rooms.Beginning
             map[v.X, v.Y] = new Cell(null, new DoorJacket(v, 2, new Vector(15, 1), Doors.BegDoors[1]), new Grass(v));
 
             v = new Vector(10, 8);
-            map[v.X, v.Y] = new Cell(null, new DoorJacket(v, 3, new Vector(1, 8), Doors.BegDoors[2]), new Grass(v));
+            map[v.X, v.Y] = new Cell(null, new DoorJacket(v, 3, new Vector(25, 8), Doors.BegDoors[2]), new Grass(v));
 
 
             return new Area(map, new Vector(1, 3));

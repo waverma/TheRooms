@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TheRooms.interfaces;
+﻿using TheRooms.interfaces;
 using TheRooms.MFUGE;
 
 namespace TheRooms.Domain
@@ -13,8 +8,12 @@ namespace TheRooms.Domain
         public bool MultiMapMode { get; set; }
         private readonly Game game;
 
-        public TickHandler(Game game)
+        public readonly int TickInterval;
+
+        public TickHandler(Game game, int interval)
         {
+            TickInterval = interval;
+            MultiMapMode = false;
             this.game = game;
         }
 

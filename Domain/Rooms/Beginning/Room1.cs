@@ -24,6 +24,7 @@ namespace TheRooms.Domain.Rooms.Beginning
 
             v = new Vector(7, 1);
             inv = new Inventory(10);
+            inv.TryPutItem(new Key(2));
             map[v.X, v.Y] = map[v.X, v.Y].AddCreature(new Chest(inv, v));
 
             v = new Vector(9, 1);

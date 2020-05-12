@@ -39,7 +39,7 @@ namespace TheRooms.MFUGE
 
         public IReadOnlyList<Vector> FindPathOrDefault(Vector start, Vector end)
         { // TODO TEST ME
-            var ordinaryPath = Path.GetOrdinaryPath(this, start, end).ToReadOnlyList();
+            var ordinaryPath = Path.GetOrdinaryPath(this, start, end)?.ToReadOnlyList();
             //var flattenedPath = Path.GetFlattenedPath(this, ordinaryPath);
             return ordinaryPath;
         }

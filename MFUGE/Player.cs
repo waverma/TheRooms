@@ -4,7 +4,7 @@ using TheRooms.interfaces;
 
 namespace TheRooms.MFUGE
 {
-    public class Player
+    public class Player : IMovable
     { // 
         public double Health { get; private set; }
         public double Mind { get; private set; }
@@ -13,6 +13,12 @@ namespace TheRooms.MFUGE
         public IItem Hand { get; private set; }
 
         public Path Path { get; private set; }
+        private MoveOrientation ori { get; set; }
+        private int stepCount { get; set; }
+
+        private int currentStep;
+
+        public double CellPerSecond => 5;
 
         public event Action PlayerDeath;
         public event Action StateChanged;
@@ -59,13 +65,40 @@ namespace TheRooms.MFUGE
 
         public Action<Game> GetAction()
         {
-            DecreaseMind(0.05);
+            DecreaseMind(0.00005);
             return game =>
             {
-                var currentVector = Path?.GetNext();
-                if (currentVector != null)
-                    game.AreaBlock.GetCurrentArea().MovePlayer((Vector)currentVector);
+                if (Path?.IsEmpty ?? true)
+                    return;
+                if (currentStep == 1)
+                {
+                    stepCount = 0;
+                    var currentVector = Path?.GetNext();
+                    if (currentVector != null)
+                        game.AreaBlock.GetCurrentArea().MovePlayer((Vector)currentVector);
+                }
+                if (currentStep == 0)
+                {
+                    ori = GetRelativeOrientation(game.AreaBlock.GetCurrentArea().PlayerLocation, Path.Peek);
+                    stepCount = (int)(1000 / CellPerSecond) / game.TickHandler.TickInterval;
+                    currentStep = stepCount;
+                    return;
+                }
+                currentStep--;
             };
+        }
+
+        private static MoveOrientation GetRelativeOrientation(Vector first, Vector second)
+        {
+            if (first + new Vector(1, 0) == second)
+                return MoveOrientation.Left;
+            if (first + new Vector(0, 1) == second)
+                return MoveOrientation.Down;
+            if (first + new Vector(-1, 0) == second)
+                return MoveOrientation.Right;
+            if (first + new Vector(0, -1) == second)
+                return MoveOrientation.Up;
+            return MoveOrientation.None;
         }
 
         public string GetImageDirectory()
@@ -82,6 +115,18 @@ namespace TheRooms.MFUGE
                 Hand.StateChanged += () => StateChanged?.Invoke();
             StateChanged?.Invoke();
             return oldItem;
+        }
+
+        public MoveOrientation GetMoveOrientation()
+        {
+            return ori;
+        }
+
+        public double GetCellShift()
+        {
+            if (stepCount == 0 || currentStep == 0) return 0;
+            var result = 1.0 - (double)currentStep / stepCount;
+            return result;
         }
     }
 }

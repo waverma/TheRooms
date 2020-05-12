@@ -48,7 +48,7 @@ namespace TheRooms.Domain
             DialogBlock = new DialogBlock();
             MenuBlock = new MenuBlock();
             PlayerStateBlock = new PlayerStateBlock(player);
-            TickHandler = new TickHandler(this);
+            TickHandler = new TickHandler(this, 41);
 
         }
 
@@ -57,7 +57,8 @@ namespace TheRooms.Domain
             var area1 = Room1.GetRoom();
             var area2 = Room2.GetRoom();
             var area3 = Room3.GetRoom();
-            return new Area[3] { area1, area2, area3 };
+            var area4 = Room4.GetRoom();
+            return new Area[4] { area1, area2, area3, area4 };
         }
 
         public void StopGame()

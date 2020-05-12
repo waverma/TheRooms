@@ -78,6 +78,7 @@
     <Compile Include="Domain\TickHandler.cs" />
     <Compile Include="interfaces\ICreator.cs" />
     <Compile Include="interfaces\IKey.cs" />
+    <Compile Include="interfaces\IMovable.cs" />
     <Compile Include="interfaces\IPeople.cs" />
     <Compile Include="interfaces\IRestroom.cs" />
     <Compile Include="Domain\Creatures\Dialog.cs" />

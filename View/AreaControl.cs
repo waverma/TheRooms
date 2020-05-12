@@ -156,9 +156,21 @@ namespace TheRooms.View
 
         private void ShowPlayer(Graphics g)
         {
+            var currentShiftOri = game.PlayerStateBlock.Player.GetMoveOrientation();
+            var currentS = game.PlayerStateBlock.Player.GetCellShift();
+            var shift = Point.Empty;
+            if (currentShiftOri == MoveOrientation.Down && Math.Abs(currentS) > 0) 
+                shift = new Point(0, (int)(CellSize.Height * currentS));
+            if (currentShiftOri == MoveOrientation.Up && Math.Abs(currentS) > 0) 
+                shift = new Point(0, -(int)(CellSize.Height * currentS));
+            if (currentShiftOri == MoveOrientation.Right && Math.Abs(currentS) > 0) 
+                shift = new Point(-(int)(CellSize.Width * currentS), 0);
+            if (currentShiftOri == MoveOrientation.Left && Math.Abs(currentS) > 0) 
+                shift = new Point((int)(CellSize.Width * currentS), 0);
+
             var size = new Size(CellSize.Width * Area.Width, CellSize.Width * Area.Height);
             g.DrawImage(new Bitmap(game.PlayerStateBlock.Player.GetImageDirectory()),
-                    new Rectangle(new Point(PlayerLocation.X - CellSize.Width / 2 + SizeShift.X, PlayerLocation.Y - CellSize.Height / 2 + SizeShift.Y), CellSize));
+                    new Rectangle(new Point(PlayerLocation.X - CellSize.Width / 2 + SizeShift.X + shift.X, PlayerLocation.Y - CellSize.Height / 2 + SizeShift.Y + shift.Y), CellSize));
         }
 
         private void MovePlayer(IEnumerable<Vector> path)
