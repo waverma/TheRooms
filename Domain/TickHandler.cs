@@ -50,11 +50,11 @@ namespace TheRooms.Domain
 
         public void OnTick()
         {
-            if (MultiMapMode)
-                foreach (var area in game.AreaBlock.GetAreas())
-                    RunMap(area);
-            else
-                RunMap(game.AreaBlock.GetCurrentArea());
+            //if (MultiMapMode)
+            //    foreach (var area in game.AreaBlock.GetAreas())
+            //        RunMap(area);
+            //else
+            //    RunMap(game.AreaBlock.GetCurrentArea());
 
             if (game.InventoryBlock.RightInventory != null)
                 foreach (var rightInventoryItem in game.InventoryBlock.RightInventory.Items)

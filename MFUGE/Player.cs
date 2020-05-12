@@ -18,7 +18,7 @@ namespace TheRooms.MFUGE
 
         private int currentStep;
 
-        public double CellPerSecond => 5;
+        public double CellPerSecond => 3;
 
         public event Action PlayerDeath;
         public event Action StateChanged;
@@ -65,7 +65,7 @@ namespace TheRooms.MFUGE
 
         public Action<Game> GetAction()
         {
-            DecreaseMind(0.00005);
+            DecreaseMind(0.0005);
             return game =>
             {
                 if (Path?.IsEmpty ?? true)
@@ -80,6 +80,11 @@ namespace TheRooms.MFUGE
                 if (currentStep == 0)
                 {
                     ori = GetRelativeOrientation(game.AreaBlock.GetCurrentArea().PlayerLocation, Path.Peek);
+                    if (ori == MoveOrientation.None)
+                    {
+                        Path.GetNext();
+                        ori = GetRelativeOrientation(game.AreaBlock.GetCurrentArea().PlayerLocation, Path.Peek);
+                    }
                     stepCount = (int)(1000 / CellPerSecond) / game.TickHandler.TickInterval;
                     currentStep = stepCount;
                     return;

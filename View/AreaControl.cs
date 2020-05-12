@@ -55,7 +55,7 @@ namespace TheRooms.View
             timer.Tick += (sender, args) =>
             {
                 game.TickHandler.OnTick();
-                Refresh();
+                //Refresh();
             };
             timer.Start();
         }
